@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relais — L'administratif de vos parents en France, pris en charge</title>
+  <meta name="description" content="Relais gère à distance l'administratif de votre parent resté en France : courrier, Ameli, retraite, impôts, aides. Mandat écrit, traitement sous 48 h, rapport mensuel. Sans opération financière.">
+  <link rel="canonical" href="{{SITE_URL}}/">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#1f3a5f">
+
+  <!-- Open Graph / réseaux sociaux -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:site_name" content="Relais">
+  <meta property="og:title" content="Relais — Vos parents en France, leur administratif entre de bonnes mains">
+  <meta property="og:description" content="Mandataire administratif à distance pour les parents restés en France. Vous recevez un rapport, pas des problèmes.">
+  <meta property="og:url" content="{{SITE_URL}}/">
+  <meta property="og:image" content="{{SITE_URL}}/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Relais — Vos parents en France, leur administratif entre de bonnes mains">
+  <meta name="twitter:description" content="Mandataire administratif à distance pour les parents restés en France. Vous recevez un rapport, pas des problèmes.">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%231f3a5f'/%3E%3Cpath%20d='M18%2046V18h14a9%209%200%200%201%203.4%2017.3L42%2046h-8l-5.6-9.6H25V46z%20M25%2024v7h7a3.5%203.5%200%200%200%200-7z'%20fill='%23fff'/%3E%3C/svg%3E">
+
+  <!-- Polices : seule dépendance externe -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Inter:wght@400;500;600&display=swap">
+
+  <!-- Données structurées -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "{{SITE_URL}}/#organization",
+        "name": "Relais",
+        "url": "{{SITE_URL}}/",
+        "email": "{{CONTACT_EMAIL}}",
+        "telephone": "{{TELEPHONE_AFFICHE}}",
+        "description": "Mandataire administratif à distance pour les parents restés en France, au service de leurs enfants expatriés.",
+        "areaServed": "FR",
+        "availableLanguage": "fr"
+      },
+      {
+        "@type": "Service",
+        "@id": "{{SITE_URL}}/#service",
+        "name": "Gestion administrative à distance pour parent âgé",
+        "serviceType": "Mandataire administratif",
+        "provider": { "@id": "{{SITE_URL}}/#organization" },
+        "areaServed": { "@type": "Country", "name": "France" },
+        "audience": { "@type": "Audience", "audienceType": "Enfants expatriés de parents âgés résidant en France" },
+        "offers": [
+          { "@type": "Offer", "name": "Abonnement Relais", "price": "89", "priceCurrency": "EUR", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "89", "priceCurrency": "EUR", "unitText": "mois" } },
+          { "@type": "Offer", "name": "Diagnostic initial", "price": "149", "priceCurrency": "EUR" },
+          { "@type": "Offer", "name": "Forfait Hospitalisation", "price": "490", "priceCurrency": "EUR" },
+          { "@type": "Offer", "name": "Forfait Entrée en EHPAD ou résidence", "price": "690", "priceCurrency": "EUR" },
+          { "@type": "Offer", "name": "Forfait Succession (volet administratif)", "price": "890", "priceCurrency": "EUR" },
+          { "@type": "Offer", "name": "Démarche isolée", "price": "79", "priceCurrency": "EUR" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!--
+    Google Tag (gtag.js) — À ACTIVER UNIQUEMENT après mise en place d'un bandeau de consentement,
+    car il dépose des cookies. Au lancement, aucun cookie n'est déposé : ce bloc reste commenté.
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-XXXXXXXXXX');
+    </script>
+  -->
+
+  <style>
+    :root {
+      --bleu: #1f3a5f;
+      --bleu-fonce: #142640;
+      --bleu-clair: #e8eef5;
+      --ocre: #a3560f;
+      --ocre-fonce: #8a4b00;
+      --vert: #1f6f4a;
+      --rouge: #a8321f;
+      --texte: #1c2430;
+      --texte-doux: #4a5563;
+      --fond: #ffffff;
+      --fond-doux: #f6f8fb;
+      --bord: #d5dde7;
+      --rayon: 12px;
+      --max: 1080px;
+      --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+      --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      margin: 0; font-family: var(--sans); font-size: 1.0625rem; line-height: 1.6;
+      color: var(--texte); background: var(--fond);
+    }
+    h1, h2, h3 { font-family: var(--serif); line-height: 1.2; color: var(--bleu); margin: 0 0 .5em; text-wrap: balance; }
+    h1 { font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 700; }
+    h2 { font-size: clamp(1.5rem, 3.5vw, 2.1rem); font-weight: 700; }
+    h3 { font-size: 1.2rem; font-weight: 600; }
+    p { margin: 0 0 1em; }
+    a { color: var(--bleu); }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--ocre); outline-offset: 3px;
+    }
+    .conteneur { width: min(100% - 2rem, var(--max)); margin-inline: auto; }
+    section { padding: 3.5rem 0; }
+    @media (min-width: 768px) { section { padding: 5rem 0; } }
+    .section-douce { background: var(--fond-doux); }
+    .surtitre { text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; font-weight: 600; color: var(--ocre-fonce); margin-bottom: .6rem; }
+    .intro { color: var(--texte-doux); max-width: 60ch; font-size: 1.1rem; }
+
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .lien-evitement { position: absolute; left: -999px; top: 0; background: var(--bleu); color: #fff; padding: .6rem 1rem; z-index: 100; }
+    .lien-evitement:focus { left: 1rem; top: 1rem; }
+
+    header.site { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); border-bottom: 1px solid var(--bord); backdrop-filter: blur(6px); }
+    .barre { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .75rem 0; }
+    .logo { display: inline-flex; align-items: center; gap: .55rem; text-decoration: none; font-family: var(--serif); font-weight: 700; font-size: 1.35rem; color: var(--bleu); }
+    .logo svg { width: 32px; height: 32px; }
+    nav.principale { display: none; }
+    nav.principale a { text-decoration: none; color: var(--texte); font-weight: 500; padding: .4rem .6rem; border-radius: 6px; }
+    nav.principale a:hover { background: var(--bleu-clair); }
+    .bouton {
+      display: inline-block; padding: .85rem 1.4rem; border-radius: 999px; font-weight: 600; text-decoration: none;
+      background: var(--ocre); color: #fff; border: 2px solid var(--ocre); cursor: pointer; font-family: var(--sans); font-size: 1rem;
+      transition: background .15s, transform .15s;
+    }
+    .bouton:hover { background: var(--ocre-fonce); border-color: var(--ocre-fonce); }
+    .bouton.secondaire { background: transparent; color: var(--bleu); border-color: var(--bleu); }
+    .bouton.secondaire:hover { background: var(--bleu-clair); }
+    .bouton.petit { padding: .55rem 1rem; font-size: .95rem; }
+    @media (min-width: 860px) {
+      nav.principale { display: flex; gap: .25rem; }
+    }
+
+    /* Hero */
+    .hero { padding: 3rem 0 3.5rem; background: linear-gradient(180deg, #f6f8fb 0%, #ffffff 100%); }
+    .hero .grille { display: grid; gap: 2rem; align-items: center; }
+    .hero .promesse { font-size: 1.15rem; color: var(--texte-doux); max-width: 55ch; }
+    .hero .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+    .hero .note { font-size: .92rem; color: var(--texte-doux); margin-top: 1rem; }
+    .hero .visuel { background: var(--bleu); color: #fff; border-radius: var(--rayon); padding: 1.5rem; }
+    .hero .visuel h2 { color: #fff; font-size: 1.1rem; margin-bottom: 1rem; font-family: var(--sans); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+    .rapport { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+    .rapport li { display: flex; gap: .75rem; align-items: flex-start; background: rgba(255,255,255,.08); padding: .75rem .9rem; border-radius: 8px; font-size: .97rem; }
+    .rapport .etat { flex: none; width: 1.6rem; height: 1.6rem; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .85rem; }
+    .etat.ok { background: #2e9b6b; } .etat.cours { background: #d98a2b; } .etat.info { background: #5b7fb0; }
+    @media (min-width: 860px) {
+      .hero { padding: 5rem 0; }
+      .hero .grille { grid-template-columns: 1.15fr 1fr; gap: 3rem; }
+    }
+
+    /* Cartes */
+    .cartes { display: grid; gap: 1.25rem; margin-top: 2rem; }
+    .carte { background: var(--fond); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 1.5rem; }
+    .carte .avant { font-family: var(--serif); font-size: 1.15rem; color: var(--bleu); font-style: italic; margin-bottom: .75rem; }
+    .carte .apres { border-top: 1px solid var(--bord); padding-top: .9rem; margin-top: .9rem; }
+    .carte .apres strong { color: var(--vert); }
+    @media (min-width: 768px) { .cartes.trois { grid-template-columns: repeat(3, 1fr); } .cartes.deux { grid-template-columns: repeat(2, 1fr); } }
+
+    /* Étapes */
+    .etapes { counter-reset: etape; list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1.25rem; }
+    .etapes li { position: relative; padding-left: 3.5rem; }
+    .etapes li::before {
+      counter-increment: etape; content: counter(etape);
+      position: absolute; left: 0; top: 0; width: 2.5rem; height: 2.5rem; border-radius: 50%;
+      background: var(--bleu); color: #fff; font-weight: 700; display: grid; place-items: center; font-family: var(--serif); font-size: 1.2rem;
+    }
+    .etapes h3 { margin-bottom: .25rem; }
+    .etapes p { margin: 0; color: var(--texte-doux); }
+    @media (min-width: 860px) { .etapes { grid-template-columns: repeat(4, 1fr); } .etapes li { padding-left: 0; padding-top: 3.2rem; } }
+
+    /* Inclus / jamais */
+    .listes { display: grid; gap: 1.25rem; margin-top: 2rem; }
+    .liste { border-radius: var(--rayon); padding: 1.5rem; border: 1px solid var(--bord); }
+    .liste.inclus { background: #eef7f2; border-color: #bfe0cf; }
+    .liste.jamais { background: #fbeeea; border-color: #efc7bd; }
+    .liste h3 { display: flex; align-items: center; gap: .5rem; }
+    .liste ul { margin: 0; padding-left: 1.25rem; }
+    .liste li { margin-bottom: .45rem; }
+    .liste.jamais strong { color: var(--rouge); }
+    @media (min-width: 768px) { .listes { grid-template-columns: 1fr 1fr; } }
+
+    /* Tarifs */
+    .tarifs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin-top: 2rem; }
+    .tarif { min-width: 0; border: 1px solid var(--bord); border-radius: var(--rayon); padding: 1.5rem; background: var(--fond); display: flex; flex-direction: column; }
+    .tarif.principal { border: 2px solid var(--bleu); box-shadow: 0 10px 30px rgba(31,58,95,.10); }
+    .prix { font-family: var(--serif); font-size: 2.4rem; font-weight: 700; color: var(--bleu); line-height: 1; margin: .5rem 0; }
+    .prix small { font-family: var(--sans); font-size: 1rem; font-weight: 500; color: var(--texte-doux); }
+    .fondateur { background: #fff4d6; border: 1px solid #f0d28a; border-radius: 8px; padding: .75rem 1rem; margin: .75rem 0 1rem; font-size: .95rem; }
+    .fondateur strong { color: var(--ocre-fonce); }
+    .tarif ul { padding-left: 1.2rem; margin: 0 0 1.25rem; flex: 1; }
+    .tarif li { margin-bottom: .4rem; }
+    .forfaits { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: .97rem; }
+    .forfaits th, .forfaits td { text-align: left; padding: .7rem .4rem; border-bottom: 1px solid var(--bord); vertical-align: top; overflow-wrap: anywhere; }
+    .forfaits th { color: var(--bleu); font-weight: 600; }
+    .forfaits td.montant { white-space: nowrap; font-weight: 600; color: var(--bleu); }
+    @media (min-width: 860px) { .tarifs { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); align-items: start; } }
+
+    /* Confiance */
+    .garanties { display: grid; gap: 1rem; margin-top: 2rem; }
+    .garantie { display: flex; gap: .9rem; align-items: flex-start; }
+    .garantie svg { flex: none; width: 2rem; height: 2rem; color: var(--vert); }
+    .garantie p { margin: 0; color: var(--texte-doux); }
+    .garantie strong { display: block; color: var(--texte); margin-bottom: .15rem; }
+    @media (min-width: 768px) { .garanties { grid-template-columns: repeat(2, 1fr); } }
+
+    /* FAQ */
+    .faq { margin-top: 2rem; display: grid; gap: .6rem; }
+    .faq details { border: 1px solid var(--bord); border-radius: 10px; background: var(--fond); }
+    .faq summary { cursor: pointer; padding: 1rem 1.25rem; font-weight: 600; color: var(--bleu); list-style: none; display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; font-size: 1.4rem; line-height: 1; color: var(--ocre); flex: none; }
+    .faq details[open] summary::after { content: "–"; }
+    .faq .reponse { padding: 0 1.25rem 1.1rem; color: var(--texte-doux); }
+    .faq .reponse p:last-child { margin-bottom: 0; }
+
+    /* Formulaire */
+    .formulaire { background: var(--fond); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 1.5rem; margin-top: 2rem; }
+    .champ { margin-bottom: 1.1rem; }
+    .champ label { display: block; font-weight: 600; margin-bottom: .35rem; }
+    .champ .aide { font-size: .9rem; color: var(--texte-doux); margin: 0 0 .35rem; }
+    .champ input, .champ select, .champ textarea {
+      width: 100%; padding: .75rem .85rem; border: 1px solid #98a6b8; border-radius: 8px; font: inherit; color: var(--texte); background: #fff;
+    }
+    .champ textarea { min-height: 7rem; resize: vertical; }
+    .champ input[aria-invalid="true"], .champ select[aria-invalid="true"], .champ textarea[aria-invalid="true"] { border-color: var(--rouge); border-width: 2px; }
+    .erreur { color: var(--rouge); font-size: .92rem; margin: .35rem 0 0; min-height: 1.2em; font-weight: 500; }
+    .rangee { display: grid; gap: 0 1rem; }
+    @media (min-width: 640px) { .rangee { grid-template-columns: 1fr 1fr; } .formulaire { padding: 2rem; } }
+    .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .message-etat { border-radius: 10px; padding: 1rem 1.25rem; margin-top: 1rem; }
+    .message-etat.succes { background: #eef7f2; border: 1px solid #bfe0cf; color: #16513a; }
+    .message-etat.echec { background: #fbeeea; border: 1px solid #efc7bd; color: #7a2314; }
+    .message-etat[hidden] { display: none; }
+    .rgpd { font-size: .9rem; color: var(--texte-doux); }
+
+    /* Pied de page */
+    footer.site { background: var(--bleu-fonce); color: #d9e1ec; padding: 2.5rem 0; font-size: .95rem; }
+    footer.site a { color: #fff; }
+    footer .colonnes { display: grid; gap: 1.5rem; }
+    footer h2 { color: #fff; font-family: var(--sans); font-size: 1rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .5rem; }
+    footer ul { list-style: none; margin: 0; padding: 0; }
+    footer li { margin-bottom: .35rem; }
+    footer .mentions { border-top: 1px solid rgba(255,255,255,.15); margin-top: 1.5rem; padding-top: 1.25rem; font-size: .88rem; color: #b6c2d2; }
+    @media (min-width: 768px) { footer .colonnes { grid-template-columns: 1.4fr 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="site">
+    <div class="conteneur barre">
+      <a class="logo" href="#haut" aria-label="Relais, accueil">
+        <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="14" fill="#1f3a5f"/><path d="M18 46V18h14a9 9 0 0 1 3.4 17.3L42 46h-8l-5.6-9.6H25V46z M25 24v7h7a3.5 3.5 0 0 0 0-7z" fill="#fff"/></svg>
+        Relais
+      </a>
+      <nav class="principale" aria-label="Navigation principale">
+        <a href="#fonctionnement">Comment ça marche</a>
+        <a href="#tarifs">Tarifs</a>
+        <a href="#confiance">Sécurité</a>
+        <a href="#faq">Questions</a>
+      </nav>
+      <a class="bouton petit" href="#contact">Réserver un appel</a>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <!-- 1. Hero -->
+    <section class="hero" id="haut" aria-labelledby="titre-hero">
+      <div class="conteneur grille">
+        <div>
+          <p class="surtitre">Mandataire administratif à distance</p>
+          <h1 id="titre-hero">Vos parents en France, leur administratif entre de bonnes mains.</h1>
+          <p class="promesse">Vous recevez un rapport, pas des problèmes. Relais reçoit le courrier de votre parent, gère ses comptes en ligne et traite chaque démarche sous 48 h ouvrées, sous mandat écrit. Vous restez dans la boucle, sans porter la charge.</p>
+          <div class="actions">
+            <a class="bouton" href="#contact">Réserver un appel de 20 minutes</a>
+            <a class="bouton secondaire" href="#fonctionnement">Voir comment ça marche</a>
+          </div>
+          <p class="note">Appel offert, sans engagement. Abonnement 89 € par mois, résiliable à tout moment.</p>
+        </div>
+        <aside class="visuel" aria-labelledby="titre-visuel">
+          <h2 id="titre-visuel">Extrait d'un rapport mensuel</h2>
+          <ul class="rapport">
+            <li><span class="etat ok" aria-hidden="true">✓</span><span><strong>Ameli</strong> : compte débloqué, carte Vitale mise à jour, 312 € de remboursements en attente versés.</span></li>
+            <li><span class="etat ok" aria-hidden="true">✓</span><span><strong>Impôts</strong> : déclaration 2025 déposée, exonération de taxe foncière demandée.</span></li>
+            <li><span class="etat cours" aria-hidden="true">…</span><span><strong>APA</strong> : dossier déposé au département, visite d'évaluation le 14 octobre.</span></li>
+            <li><span class="etat info" aria-hidden="true">i</span><span><strong>À décider</strong> : la mutuelle propose un nouveau contrat, comparatif joint.</span></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 2. Trois situations -->
+    <section class="section-douce" id="situations" aria-labelledby="titre-situations">
+      <div class="conteneur">
+        <p class="surtitre">Vous reconnaissez-vous ?</p>
+        <h2 id="titre-situations">Trois situations que nous réglons chaque semaine</h2>
+        <p class="intro">Vous êtes à Tel Aviv, Genève, Londres ou Montréal. Votre parent est en France. Et l'administration française, elle, est en ligne.</p>
+        <div class="cartes trois">
+          <article class="carte">
+            <h3>Le compte Ameli bloqué</h3>
+            <p class="avant">« Ma mère n'a plus de remboursements depuis trois mois. Son compte Ameli demande un code qu'elle ne reçoit jamais. Je passe mes soirées au téléphone à lui dicter des identifiants. »</p>
+            <div class="apres"><strong>Avec Relais :</strong> nous récupérons l'accès sous mandat, mettons à jour la carte Vitale et les coordonnées, vérifions la mutuelle. Vous recevez le montant régularisé dans le rapport.</div>
+          </article>
+          <article class="carte">
+            <h3>La déclaration d'impôts</h3>
+            <p class="avant">« Mon père reçoit une lettre de relance des impôts. Il n'a jamais déclaré en ligne. Je ne connais ni son numéro fiscal ni ses revenus, et je suis à 6 heures de décalage. »</p>
+            <div class="apres"><strong>Avec Relais :</strong> nous réunissons les justificatifs, déposons la déclaration, demandons les exonérations auxquelles il a droit et suivons le prélèvement à la source. Aucune pénalité.</div>
+          </article>
+          <article class="carte">
+            <h3>La sortie d'hospitalisation</h3>
+            <p class="avant">« L'hôpital annonce la sortie de ma mère vendredi. Il faut une aide à domicile, un dossier APA, prévenir la mutuelle, organiser le transport. Je ne peux pas être là avant trois semaines. »</p>
+            <div class="apres"><strong>Avec Relais :</strong> nous coordonnons la sortie avec le service social, déposons le dossier APA et l'aide à domicile, gérons la mutuelle et le transport. Vous validez les décisions, nous faisons le reste.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Comment ça marche -->
+    <section id="fonctionnement" aria-labelledby="titre-fonctionnement">
+      <div class="conteneur">
+        <p class="surtitre">Simple et cadré</p>
+        <h2 id="titre-fonctionnement">Comment ça marche, en quatre étapes</h2>
+        <ol class="etapes">
+          <li>
+            <h3>Le mandat</h3>
+            <p>Après un appel de 20 minutes avec vous, nous appelons votre parent pour lui expliquer le service. Il signe un mandat administratif écrit, révocable à tout moment. Vous en recevez copie.</p>
+          </li>
+          <li>
+            <h3>Le diagnostic</h3>
+            <p>En trois semaines, nous récupérons les accès, inventorions tous les organismes et contrats, mettons en place la réception du courrier et vous remettons un rapport : situation, anomalies, droits à réclamer.</p>
+          </li>
+          <li>
+            <h3>Le traitement sous 48 h</h3>
+            <p>Chaque courrier et chaque demande sont traités sous 48 h ouvrées. Votre parent dispose d'une ligne dédiée aux heures françaises. Toute urgence vous est signalée immédiatement.</p>
+          </li>
+          <li>
+            <h3>Le rapport mensuel</h3>
+            <p>Le 1<sup>er</sup> de chaque mois, vous recevez ce qui a été fait, ce qui est en cours, les échéances à venir, les montants obtenus et les décisions qui vous reviennent.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 4. Inclus / jamais -->
+    <section class="section-douce" id="perimetre" aria-labelledby="titre-perimetre">
+      <div class="conteneur">
+        <p class="surtitre">Un périmètre clair</p>
+        <h2 id="titre-perimetre">Ce qui est inclus, et ce que nous ne faisons jamais</h2>
+        <div class="listes">
+          <div class="liste inclus">
+            <h3><span aria-hidden="true">✓</span> Inclus dans l'abonnement, sans limite</h3>
+            <ul>
+              <li>Réception, tri et traitement de tout le courrier administratif.</li>
+              <li>Gestion des comptes en ligne : Ameli, retraite, impôts, mutuelle, énergie, télécom, banque en consultation.</li>
+              <li>Déclaration de revenus annuelle.</li>
+              <li>Demandes et renouvellements d'aides : APA, aides au logement, exonérations, carte mobilité inclusion.</li>
+              <li>Résiliations, changements de contrat, litiges simples (rappels, réclamations, médiation).</li>
+              <li>Prise de rendez-vous médicaux et administratifs.</li>
+              <li>Ligne téléphonique dédiée pour votre parent, aux horaires français.</li>
+              <li>Rapport mensuel et alerte immédiate en cas d'urgence.</li>
+              <li>Espace partagé avec tous les documents classés.</li>
+            </ul>
+          </div>
+          <div class="liste jamais">
+            <h3><span aria-hidden="true">✕</span> Ce que nous ne faisons jamais</h3>
+            <ul>
+              <li><strong>Aucune opération financière.</strong> Aucun virement, aucun paiement, aucun retrait, aucune procuration bancaire. Nous préparons, vous ou votre parent validez.</li>
+              <li><strong>Aucun acte de disposition</strong> : pas de vente, de donation, d'engagement de crédit, ni de souscription d'assurance-vie ou de placement.</li>
+              <li><strong>Aucun conseil juridique, fiscal ou patrimonial.</strong> Nous vous orientons vers un avocat, un notaire ou un conseiller.</li>
+              <li><strong>Aucune présence physique</strong> : nous n'intervenons pas au domicile et ne remplaçons pas l'aide à domicile.</li>
+              <li><strong>Aucun mandat</strong> pour une personne sous tutelle ou curatelle, sauf accord écrit de la personne chargée de la mesure.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Tarifs -->
+    <section id="tarifs" aria-labelledby="titre-tarifs">
+      <div class="conteneur">
+        <p class="surtitre">Sans engagement</p>
+        <h2 id="titre-tarifs">Tarifs</h2>
+        <p class="intro">Un abonnement mensuel pour le quotidien, des forfaits pour les grands événements de la vie. Aucun frais caché : les éventuels timbres fiscaux ou frais de dossier des organismes sont réglés par vous, jamais avancés par nous.</p>
+        <div class="tarifs">
+          <div class="tarif principal">
+            <h3>Abonnement Relais</h3>
+            <p class="prix">89 € <small>par mois</small></p>
+            <div class="fondateur"><strong>Tarif fondateur : 59 € par mois</strong>, réservé aux 10 premiers abonnés, acquis tant que l'abonnement reste actif.</div>
+            <ul>
+              <li>Tout le périmètre inclus ci-dessus, sans limite de démarches.</li>
+              <li>Diagnostic initial offert (valeur 149 €).</li>
+              <li>Résiliable à tout moment, effet à la fin du mois.</li>
+              <li>Facturé à vous, hors TVA française si vous résidez hors de l'Union européenne.</li>
+            </ul>
+            <a class="bouton" href="#contact">Réserver un appel de 20 minutes</a>
+          </div>
+          <div class="tarif">
+            <h3>Forfaits ponctuels</h3>
+            <p>Pour un besoin précis, avec ou sans abonnement.</p>
+            <table class="forfaits">
+              <caption class="visually-hidden">Liste des forfaits et de leur prix</caption>
+              <thead>
+                <tr><th scope="col">Forfait</th><th scope="col">Contenu</th><th scope="col">Prix</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Diagnostic initial</th><td>Audit complet, récupération des accès, liste des droits non réclamés.</td><td class="montant">149 €</td></tr>
+                <tr><th scope="row">Hospitalisation</th><td>Coordination de la sortie, dossier APA et aide à domicile, mutuelle, transport.</td><td class="montant">490 €</td></tr>
+                <tr><th scope="row">Entrée en EHPAD ou résidence</th><td>Dossier ViaTrajectoire, aides ASH et APA, résiliations, déménagement administratif.</td><td class="montant">690 €</td></tr>
+                <tr><th scope="row">Succession, volet administratif</th><td>Déclarations, clôtures de comptes et contrats, pensions de réversion, coordination avec le notaire.</td><td class="montant">890 €</td></tr>
+                <tr><th scope="row">Démarche isolée</th><td>Une démarche complète, de la demande à la confirmation, sans abonnement.</td><td class="montant">79 €</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Sécurité et confiance -->
+    <section class="section-douce" id="confiance" aria-labelledby="titre-confiance">
+      <div class="conteneur">
+        <p class="surtitre">Sécurité et confiance</p>
+        <h2 id="titre-confiance">Nous agissons pour votre parent, jamais à sa place</h2>
+        <p class="intro">Votre parent reste décisionnaire. Notre rôle est de faire, de suivre et de rendre compte. Tout est cadré par écrit.</p>
+        <div class="garanties">
+          <div class="garantie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/></svg>
+            <p><strong>Un mandat écrit, limité et lisible</strong>Chaque pouvoir est listé, chaque organisme est coché par votre parent. Les exclusions financières sont écrites en gras.</p>
+          </div>
+          <div class="garantie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <p><strong>Un coffre chiffré pour les identifiants</strong>Aucun mot de passe par courriel ni par messagerie. Accès nominatifs, double authentification, révocation immédiate.</p>
+          </div>
+          <div class="garantie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            <p><strong>Un journal d'accès</strong>Chaque connexion à un compte de votre parent est tracée : qui, quand, pour quelle démarche. Consultable sur demande.</p>
+          </div>
+          <div class="garantie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 9-4.5-.5-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg>
+            <p><strong>Une assurance responsabilité civile professionnelle</strong>Le service est couvert. L'attestation vous est remise sur demande.</p>
+          </div>
+          <div class="garantie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            <p><strong>Révocable à tout moment</strong>Un simple courrier ou courriel de votre parent met fin au mandat. Nous restituons les accès et les documents sous quinze jours.</p>
+          </div>
+          <div class="garantie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 4h16v12H7l-3 3z"/><path d="M8 9h8M8 12h5"/></svg>
+            <p><strong>Vous êtes toujours dans la boucle</strong>Copie du mandat, rapport mensuel, alerte immédiate en cas d'urgence, appel trimestriel de 15 minutes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. FAQ -->
+    <section id="faq" aria-labelledby="titre-faq">
+      <div class="conteneur">
+        <p class="surtitre">Vos questions</p>
+        <h2 id="titre-faq">Questions fréquentes</h2>
+        <div class="faq">
+          <details>
+            <summary>Le mandat est-il légal ? Les organismes l'acceptent-ils ?</summary>
+            <div class="reponse"><p>Oui. Il s'agit d'un mandat de représentation sous seing privé, prévu par les articles 1984 et suivants du Code civil. La plupart des organismes acceptent une procuration simple accompagnée de la pièce d'identité du mandant. Pour les rares qui exigent la présence du titulaire, nous organisons un appel à trois avec votre parent. Le modèle de mandat a été rédigé pour être relu par un avocat avant utilisation.</p></div>
+          </details>
+          <details>
+            <summary>Mon parent est sous tutelle ou curatelle. Est-ce possible ?</summary>
+            <div class="reponse"><p>Pas directement. Le mandat suppose que votre parent a sa pleine capacité juridique. Si une mesure de protection est en place, c'est la personne chargée de la mesure qui décide ; nous pouvons intervenir avec son accord écrit, en appui. Si une mesure est en cours d'instruction, parlez-nous-en lors de l'appel.</p></div>
+          </details>
+          <details>
+            <summary>Et si mon parent refuse ?</summary>
+            <div class="reponse"><p>Nous ne faisons rien sans son accord. C'est lui qui signe le mandat. Notre expérience : quand c'est l'enfant qui propose et qu'un interlocuteur prend le temps d'expliquer, au téléphone, ce qui sera fait et ce qui ne sera jamais fait (pas d'argent, pas de décision à sa place), la réponse est presque toujours oui. L'appel avec votre parent est inclus, sans engagement.</p></div>
+          </details>
+          <details>
+            <summary>Que se passe-t-il en cas de décès ?</summary>
+            <div class="reponse"><p>Le mandat prend fin automatiquement. Si vous le souhaitez, le forfait Succession (volet administratif, 890 €) prend le relais : déclarations aux organismes, clôtures de contrats, pensions de réversion, coordination avec le notaire. Nous ne faisons pas la succession elle-même, qui relève du notaire.</p></div>
+          </details>
+          <details>
+            <summary>Dans quels pays d'expatriation le service est-il disponible ?</summary>
+            <div class="reponse"><p>Partout : Israël, Suisse, Belgique, Luxembourg, Royaume-Uni, États-Unis, Canada, Émirats, Singapour, Hong Kong ou ailleurs. Seul votre parent doit résider en France. Les échanges avec vous se font par courriel, visio et téléphone, adaptés à votre fuseau horaire.</p></div>
+          </details>
+          <details>
+            <summary>Y a-t-il de la TVA sur la facture ?</summary>
+            <div class="reponse"><p>Cela dépend de votre pays de résidence. Hors Union européenne, la prestation est facturée sans TVA française. Dans un autre pays de l'Union européenne, la TVA de votre pays de résidence peut s'appliquer. En France, la TVA française s'applique. Le détail figure dans les conditions générales de vente.</p></div>
+          </details>
+          <details>
+            <summary>Comment résilier ?</summary>
+            <div class="reponse"><p>Par un simple courriel, à tout moment. La résiliation prend effet à la fin du mois en cours. Aucun frais. Nous achevons les démarches urgentes, remettons un rapport de clôture, restituons les accès et supprimons les nôtres sous quinze jours.</p></div>
+          </details>
+          <details>
+            <summary>Comment sont protégées les données de mon parent ?</summary>
+            <div class="reponse"><p>Les identifiants sont conservés dans un coffre chiffré, avec accès nominatifs et journal d'accès. Les données de santé ne sont traitées qu'avec le consentement explicite de votre parent, pour les seules démarches concernées, et supprimées dès la clôture. Nous privilégions des outils hébergés dans l'Union européenne. Notre politique de confidentialité détaille chaque traitement et vos droits.</p></div>
+          </details>
+          <details>
+            <summary>Comment recevez-vous le courrier ?</summary>
+            <div class="reponse"><p>Deux options, selon la situation. Soit une réexpédition La Poste du courrier vers notre adresse de traitement, où il est numérisé le jour même et le courrier personnel renvoyé à votre parent. Soit votre parent, ou un proche, photographie le courrier avec son téléphone et nous l'envoie. Nous choisissons ensemble lors du diagnostic.</p></div>
+          </details>
+          <details>
+            <summary>Qui traite concrètement le dossier de mon parent ?</summary>
+            <div class="reponse"><p>Un gestionnaire de dossiers dédié, francophone, ayant une expérience des organismes français (CAF, Assurance Maladie, mutuelle, banque ou assurance), formé à nos procédures écrites. Il est l'interlocuteur unique de votre parent sur la ligne dédiée. Son travail est contrôlé le premier mois, et chaque action est tracée dans l'espace partagé.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Formulaire de contact -->
+    <section class="section-douce" id="contact" aria-labelledby="titre-contact">
+      <div class="conteneur">
+        <p class="surtitre">Premier contact</p>
+        <h2 id="titre-contact">Réservez un appel de 20 minutes</h2>
+        <p class="intro">Cinq questions, une minute. Nous vous rappelons sous 24 h ouvrées au créneau que vous indiquez. Sans engagement.</p>
+
+        <form class="formulaire" id="formulaire-contact" action="{{FORMSPREE_ENDPOINT}}" method="POST" novalidate>
+          <div class="rangee">
+            <div class="champ">
+              <label for="pays">1. Dans quel pays vivez-vous ?</label>
+              <select id="pays" name="pays" required aria-describedby="erreur-pays">
+                <option value="">Choisir un pays</option>
+                <option>Israël</option>
+                <option>Suisse</option>
+                <option>Belgique</option>
+                <option>Luxembourg</option>
+                <option>Royaume-Uni</option>
+                <option>États-Unis</option>
+                <option>Canada</option>
+                <option>Émirats arabes unis</option>
+                <option>Singapour</option>
+                <option>Hong Kong</option>
+                <option>Autre pays</option>
+              </select>
+              <p class="erreur" id="erreur-pays" aria-live="polite"></p>
+            </div>
+            <div class="champ">
+              <label for="ville">2. Où vit votre parent en France ? (ville)</label>
+              <input type="text" id="ville" name="ville_parent" required autocomplete="off" aria-describedby="erreur-ville" maxlength="80">
+              <p class="erreur" id="erreur-ville" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="rangee">
+            <div class="champ">
+              <label for="age">3. Quel âge a votre parent ?</label>
+              <input type="number" id="age" name="age_parent" required min="50" max="110" inputmode="numeric" aria-describedby="erreur-age">
+              <p class="erreur" id="erreur-age" aria-live="polite"></p>
+            </div>
+            <div class="champ">
+              <label for="email">5. Votre courriel</label>
+              <input type="email" id="email" name="email" required autocomplete="email" aria-describedby="erreur-email" maxlength="120">
+              <p class="erreur" id="erreur-email" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="champ">
+            <label for="demarche">4. Quelle est la démarche qui vous pose problème aujourd'hui ?</label>
+            <p class="aide" id="aide-demarche">Par exemple : compte Ameli bloqué, déclaration d'impôts, dossier APA, sortie d'hospitalisation, courrier qui s'accumule.</p>
+            <textarea id="demarche" name="demarche" required aria-describedby="aide-demarche erreur-demarche" maxlength="1500"></textarea>
+            <p class="erreur" id="erreur-demarche" aria-live="polite"></p>
+          </div>
+          <div class="champ">
+            <label for="creneau">5. Le meilleur créneau pour un appel de 20 minutes</label>
+            <p class="aide" id="aide-creneau">Indiquez le jour, l'heure et votre fuseau horaire, par exemple « mardi ou jeudi, 19 h à 21 h, heure d'Israël ».</p>
+            <input type="text" id="creneau" name="creneau" required aria-describedby="aide-creneau erreur-creneau" maxlength="160">
+            <p class="erreur" id="erreur-creneau" aria-live="polite"></p>
+          </div>
+          <div class="honeypot" aria-hidden="true">
+            <label for="site-web">Ne pas remplir</label>
+            <input type="text" id="site-web" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+          <input type="hidden" name="_subject" value="Nouvelle demande d'appel — Relais">
+          <input type="hidden" name="_language" value="fr">
+          <p class="rgpd">En envoyant ce formulaire, vous acceptez que Relais utilise ces informations pour vous rappeler et organiser l'appel. Elles sont conservées trois ans au plus si vous ne souscrivez pas. Voir la <a href="#confidentialite">politique de confidentialité</a>.</p>
+          <p class="erreur" id="erreur-formulaire" aria-live="assertive"></p>
+          <button class="bouton" type="submit" id="bouton-envoyer">Demander à être rappelé</button>
+          <div class="message-etat succes" id="message-succes" hidden role="status">
+            <strong>Merci, votre demande est bien reçue.</strong> Nous vous rappelons sous 24 h ouvrées au créneau indiqué. Un accusé de réception vient de vous être envoyé par courriel.
+          </div>
+          <div class="message-etat echec" id="message-echec" hidden role="alert">
+            <strong>L'envoi n'a pas abouti.</strong> Vérifiez votre connexion et réessayez, ou écrivez-nous directement à <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a>.
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- 9. Pied de page -->
+  <footer class="site" id="pied">
+    <div class="conteneur">
+      <div class="colonnes">
+        <div>
+          <h2>Relais</h2>
+          <p>Mandataire administratif à distance pour les parents restés en France, au service de leurs enfants expatriés. Mandat écrit, traitement sous 48 h ouvrées, rapport mensuel. Aucune opération financière.</p>
+        </div>
+        <div>
+          <h2>Documents</h2>
+          <ul>
+            <li><a href="{{URL_CGV}}" id="cgv">Conditions générales de vente</a></li>
+            <li><a href="{{URL_CONFIDENTIALITE}}" id="confidentialite">Politique de confidentialité</a></li>
+            <li><a href="{{URL_MANDAT}}">Modèle de mandat</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Contact</h2>
+          <ul>
+            <li><a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></li>
+            <li><a href="tel:{{TELEPHONE_LIEN}}">{{TELEPHONE_AFFICHE}}</a></li>
+            <li><a href="#contact">Réserver un appel</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mentions" id="mentions-legales">
+        <p><strong>Mentions légales.</strong> Site édité par {{MANDATAIRE_RAISON_SOCIALE}}, {{MANDATAIRE_FORME_JURIDIQUE}} au capital de {{MANDATAIRE_CAPITAL}} €, RCS {{MANDATAIRE_VILLE_RCS}} {{MANDATAIRE_SIREN}}, siège social : {{MANDATAIRE_ADRESSE}}. Directeur de la publication : {{MANDATAIRE_REPRESENTANT}}. Hébergeur : {{HEBERGEUR_NOM}}, {{HEBERGEUR_ADRESSE}}. Ce site ne dépose aucun cookie et n'utilise aucun outil de mesure d'audience.</p>
+        <p>© <span id="annee">2026</span> Relais. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+      document.getElementById('annee').textContent = String(new Date().getFullYear());
+
+      var form = document.getElementById('formulaire-contact');
+      var bouton = document.getElementById('bouton-envoyer');
+      var succes = document.getElementById('message-succes');
+      var echec = document.getElementById('message-echec');
+      var erreurGlobale = document.getElementById('erreur-formulaire');
+
+      var regles = [
+        { id: 'pays', message: 'Indiquez votre pays de résidence.' },
+        { id: 'ville', message: 'Indiquez la ville où vit votre parent.' },
+        { id: 'age', message: 'Indiquez un âge entre 50 et 110 ans.', valide: function (v) { var n = Number(v); return v !== '' && n >= 50 && n <= 110; } },
+        { id: 'demarche', message: 'Décrivez en quelques mots la démarche qui vous pose problème.', valide: function (v) { return v.trim().length >= 10; } },
+        { id: 'email', message: 'Indiquez une adresse de courriel valide.', valide: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); } },
+        { id: 'creneau', message: 'Indiquez un créneau pour l\'appel.' }
+      ];
+
+      function afficherErreur(champ, message) {
+        var zone = document.getElementById('erreur-' + champ.id);
+        champ.setAttribute('aria-invalid', message ? 'true' : 'false');
+        if (zone) { zone.textContent = message || ''; }
+      }
+
+      function valider() {
+        var premierInvalide = null;
+        regles.forEach(function (regle) {
+          var champ = document.getElementById(regle.id);
+          var valeur = champ.value || '';
+          var ok = regle.valide ? regle.valide(valeur) : valeur.trim().length > 0;
+          afficherErreur(champ, ok ? '' : regle.message);
+          if (!ok && !premierInvalide) { premierInvalide = champ; }
+        });
+        return premierInvalide;
+      }
+
+      regles.forEach(function (regle) {
+        var champ = document.getElementById(regle.id);
+        champ.addEventListener('input', function () {
+          if (champ.getAttribute('aria-invalid') === 'true') { valider(); }
+        });
+      });
+
+      form.addEventListener('submit', function (evt) {
+        evt.preventDefault();
+        succes.hidden = true;
+        echec.hidden = true;
+        erreurGlobale.textContent = '';
+        var invalide = valider();
+        if (invalide) {
+          erreurGlobale.textContent = 'Merci de corriger les champs signalés.';
+          invalide.focus();
+          return;
+        }
+        var action = form.getAttribute('action');
+        if (!action || action.indexOf('{{') === 0) {
+          echec.hidden = false;
+          echec.focus && echec.focus();
+          return;
+        }
+        bouton.disabled = true;
+        bouton.textContent = 'Envoi en cours…';
+        var donnees = new FormData(form);
+        fetch(action, { method: 'POST', body: donnees, headers: { 'Accept': 'application/json' } })
+          .then(function (reponse) {
+            if (reponse.ok) {
+              form.reset();
+              succes.hidden = false;
+              succes.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+              echec.hidden = false;
+            }
+          })
+          .catch(function () { echec.hidden = false; })
+          .then(function () {
+            bouton.disabled = false;
+            bouton.textContent = 'Demander à être rappelé';
+          });
+      });
+
+      /*
+        Conversion Google Ads — À ACTIVER avec le Google Tag (voir le bloc commenté dans <head>).
+        À placer dans le bloc de succès ci-dessus, après form.reset() :
+        gtag('event', 'conversion', { 'send_to': 'AW-XXXXXXXXXX/XXXXXXXXXXXX' });
+      */
+    })();
+  </script>
+</body>
+</html>

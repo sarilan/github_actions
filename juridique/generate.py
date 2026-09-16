@@ -101,6 +101,29 @@ def _set_cell_borders(cell, color: str = "1F3A5F", size: int = 12) -> None:
     tc_pr.append(borders)
 
 
+def _fix_layout(table) -> None:
+    """Impose une largeur de colonnes fixe (Word ignore sinon les largeurs des cellules)."""
+    tbl_pr = table._tbl.tblPr
+    layout = OxmlElement("w:tblLayout")
+    layout.set(qn("w:type"), "fixed")
+    tbl_pr.append(layout)
+
+
+def _keep_table_together(table) -> None:
+    """Empêche le tableau de se couper entre deux pages."""
+    for row in table.rows:
+        tr_pr = row._tr.get_or_add_trPr()
+        cant_split = OxmlElement("w:cantSplit")
+        tr_pr.append(cant_split)
+    rows = table.rows
+    for idx, row in enumerate(rows):
+        for cell in row.cells:
+            for par in cell.paragraphs:
+                par.paragraph_format.keep_together = True
+                if idx < len(rows) - 1:
+                    par.paragraph_format.keep_with_next = True
+
+
 def _add_field(paragraph, instr: str) -> None:
     """Insère un champ Word (PAGE, NUMPAGES…) dans un paragraphe."""
     run = paragraph.add_run()
@@ -261,6 +284,8 @@ def _add_signatures(doc: Document) -> None:
         for cell in row.cells:
             for par in cell.paragraphs:
                 par.paragraph_format.space_after = Pt(2)
+    _keep_table_together(table)
+    p.paragraph_format.keep_with_next = True
     doc.add_paragraph()
 
 
@@ -271,7 +296,11 @@ def _add_checklist(doc: Document) -> None:
     table = doc.add_table(rows=len(rows), cols=3)
     table.style = "Table Grid"
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    table.autofit = False
+    _fix_layout(table)
     widths = (Cm(1.0), Cm(9.0), Cm(6.6))
+    for j, w in enumerate(widths):
+        table.columns[j].width = w
     for i, row in enumerate(rows):
         for j, txt in enumerate(row):
             cell = table.rows[i].cells[j]
