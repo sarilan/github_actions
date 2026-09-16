@@ -1,0 +1,10 @@
+ENGIE
+Service Clients — TSA 87494 — 76934 Rouen Cedex 9 — engie.fr
+
+Facture de gaz naturel n° G-2026-3310 du 9 septembre 2026
+Référence client : 9876543210
+Point de comptage : GI123456
+
+Consommation relevée : 1 820 kWh du 01/06/2026 au 31/08/2026
+Montant à payer : 214,90 € TTC
+Date limite de paiement : 05/10/2026

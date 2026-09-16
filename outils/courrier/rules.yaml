@@ -1,0 +1,672 @@
+# Règles de classification du courrier — service Relais
+#
+# Trois sections :
+#   organismes : reconnaissance de l'expéditeur (motifs sur en-têtes, SIRET/SIREN, adresses,
+#                formulations propres). Les motifs sont des expressions régulières appliquées
+#                au texte normalisé (minuscules, sans accents, espaces réduits).
+#                « poids » : contribution au score ; un motif trouvé dans l'en-tête (15
+#                premières lignes) compte double. L'organisme au meilleur score est retenu ;
+#                la confiance est le rapport entre ce score et le score maximal possible.
+#   types      : type de document, avec marqueurs pondérés et un ordre de priorité en cas
+#                d'égalité (une mise en demeure contient aussi le mot « facture »).
+#   urgence    : niveau de base par type, puis modificateurs explicites (délai, montant,
+#                organisme critique, mots-clés de sanction). Le niveau est borné entre 1 et 4.
+#
+# Pour ajouter un organisme : copier un bloc, choisir un identifiant unique (minuscules,
+# tirets), renseigner au moins deux motifs distinctifs (nom + adresse ou SIREN + formule
+# d'usage), ajouter un courrier d'exemple dans tests/corpus/ et sa ligne dans
+# tests/corpus/attendus.yaml, puis lancer les tests.
+
+version: 1
+
+organismes:
+  # ---------------------------------------------------------------- santé
+  - id: cpam
+    nom: CPAM — Assurance Maladie
+    categorie: Santé
+    critique: false
+    motifs:
+      - { regex: "assurance maladie", poids: 3 }
+      - { regex: "\\bcpam\\b", poids: 4 }
+      - { regex: "caisse primaire", poids: 4 }
+      - { regex: "\\bameli\\b", poids: 3 }
+      - { regex: "\\b3646\\b", poids: 3 }
+      - { regex: "carte vitale", poids: 1 }
+      - { regex: "feuille(s)? de soins", poids: 1 }
+      - { regex: "\\bcnam\\b", poids: 2 }
+  - id: hopital
+    nom: Hôpital / établissement de santé
+    categorie: Santé
+    critique: false
+    motifs:
+      - { regex: "centre hospitalier", poids: 4 }
+      - { regex: "\\bhopital\\b", poids: 3 }
+      - { regex: "\\bap-?hp\\b", poids: 4 }
+      - { regex: "assistance publique", poids: 3 }
+      - { regex: "compte rendu (d'|de )?hospitalisation", poids: 3 }
+      - { regex: "service (des )?admissions", poids: 2 }
+      - { regex: "\\bclinique\\b", poids: 3 }
+      - { regex: "frais de sejour", poids: 2 }
+  - id: ehpad
+    nom: EHPAD / résidence pour personnes âgées
+    categorie: Santé
+    critique: false
+    motifs:
+      - { regex: "\\behpad\\b", poids: 4 }
+      - { regex: "residence (autonomie|seniors|services)", poids: 3 }
+      - { regex: "maison de retraite", poids: 3 }
+      - { regex: "contrat de sejour", poids: 3 }
+      - { regex: "viatrajectoire", poids: 3 }
+      - { regex: "tarif hebergement", poids: 2 }
+      - { regex: "tarif dependance", poids: 2 }
+
+  # ---------------------------------------------------------------- retraite
+  - id: assurance-retraite
+    nom: L'Assurance retraite (CNAV / CARSAT)
+    categorie: Retraite
+    critique: false
+    motifs:
+      - { regex: "assurance retraite", poids: 4 }
+      - { regex: "\\bcnav\\b", poids: 4 }
+      - { regex: "\\bcarsat\\b", poids: 4 }
+      - { regex: "caisse nationale d'assurance vieillesse", poids: 4 }
+      - { regex: "lassuranceretraite\\.fr", poids: 3 }
+      - { regex: "\\b3960\\b", poids: 3 }
+      - { regex: "pension de reversion", poids: 1 }
+  - id: agirc-arrco
+    nom: Agirc-Arrco
+    categorie: Retraite
+    critique: false
+    motifs:
+      - { regex: "agirc[- ]?arrco", poids: 5 }
+      - { regex: "retraite complementaire", poids: 2 }
+      - { regex: "\\b0820 200 189\\b", poids: 3 }
+      - { regex: "allocation de retraite complementaire", poids: 2 }
+  - id: msa
+    nom: MSA — Mutualité sociale agricole
+    categorie: Retraite
+    critique: false
+    motifs:
+      - { regex: "mutualite sociale agricole", poids: 5 }
+      - { regex: "\\bmsa\\b", poids: 4 }
+      - { regex: "msa\\.fr", poids: 3 }
+  - id: ircantec
+    nom: Ircantec
+    categorie: Retraite
+    critique: false
+    motifs:
+      - { regex: "\\bircantec\\b", poids: 5 }
+      - { regex: "caisse des depots", poids: 2 }
+      - { regex: "agents non titulaires", poids: 2 }
+  - id: cnracl
+    nom: CNRACL
+    categorie: Retraite
+    critique: false
+    motifs:
+      - { regex: "\\bcnracl\\b", poids: 5 }
+      - { regex: "collectivites locales", poids: 2 }
+      - { regex: "caisse nationale de retraites des agents", poids: 4 }
+
+  # ---------------------------------------------------------------- impôts et recouvrement public
+  - id: dgfip
+    nom: DGFiP — impôts (service des impôts des particuliers)
+    categorie: Impôts
+    critique: true
+    motifs:
+      - { regex: "finances publiques", poids: 4 }
+      - { regex: "\\bdgfip\\b", poids: 4 }
+      - { regex: "service des impots des particuliers", poids: 4 }
+      - { regex: "\\bsip\\b", poids: 2 }
+      - { regex: "impots\\.gouv\\.fr", poids: 3 }
+      - { regex: "avis d'imp(o|ô)t", poids: 2 }
+      - { regex: "numero fiscal", poids: 2 }
+      - { regex: "taxe fonciere", poids: 2 }
+      - { regex: "prelevement a la source", poids: 1 }
+  - id: tresor-public
+    nom: Trésorerie / centre des finances publiques (recouvrement)
+    categorie: Impôts
+    critique: true
+    motifs:
+      - { regex: "tresor public", poids: 4 }
+      - { regex: "tresorerie", poids: 3 }
+      - { regex: "centre des finances publiques", poids: 3 }
+      - { regex: "avis de somme a payer", poids: 3 }
+      - { regex: "titre executoire", poids: 3 }
+      - { regex: "comptable public", poids: 3 }
+  - id: urssaf
+    nom: URSSAF / CESU
+    categorie: Aides sociales
+    critique: false
+    motifs:
+      - { regex: "\\burssaf\\b", poids: 5 }
+      - { regex: "\\bcesu\\b", poids: 4 }
+      - { regex: "cesu\\.urssaf\\.fr", poids: 3 }
+      - { regex: "cotisations sociales", poids: 2 }
+
+  # ---------------------------------------------------------------- aides sociales et collectivités
+  - id: caf
+    nom: CAF — Caisse d'allocations familiales
+    categorie: Aides sociales
+    critique: false
+    motifs:
+      - { regex: "allocations familiales", poids: 4 }
+      - { regex: "\\bcaf\\b", poids: 4 }
+      - { regex: "caf\\.fr", poids: 3 }
+      - { regex: "numero d'allocataire", poids: 3 }
+      - { regex: "aide au logement", poids: 2 }
+      - { regex: "\\b(apl|als)\\b", poids: 1 }
+  - id: conseil-departemental
+    nom: Conseil départemental (APA, aide sociale)
+    categorie: Aides sociales
+    critique: false
+    motifs:
+      - { regex: "conseil departemental", poids: 5 }
+      - { regex: "\\bdepartement\\b", poids: 1 }
+      - { regex: "allocation personnalisee d'autonomie", poids: 3 }
+      - { regex: "\\bapa\\b", poids: 2 }
+      - { regex: "maison departementale de l'autonomie", poids: 4 }
+      - { regex: "equipe medico-?sociale", poids: 2 }
+      - { regex: "aide sociale a l'hebergement", poids: 2 }
+  - id: mairie-ccas
+    nom: Mairie / CCAS
+    categorie: Mairie / CCAS
+    critique: false
+    motifs:
+      - { regex: "\\bmairie\\b", poids: 3 }
+      - { regex: "\\bccas\\b", poids: 4 }
+      - { regex: "centre communal d'action sociale", poids: 5 }
+      - { regex: "hotel de ville", poids: 3 }
+      - { regex: "le maire", poids: 2 }
+      - { regex: "etat civil", poids: 1 }
+  - id: prefecture
+    nom: Préfecture
+    categorie: Titres d'identité
+    critique: false
+    motifs:
+      - { regex: "\\bprefecture\\b", poids: 4 }
+      - { regex: "le prefet", poids: 3 }
+      - { regex: "sous-?prefecture", poids: 4 }
+      - { regex: "\\.gouv\\.fr", poids: 1 }
+  - id: ants
+    nom: ANTS — titres sécurisés
+    categorie: Titres d'identité
+    critique: false
+    motifs:
+      - { regex: "\\bants\\b", poids: 5 }
+      - { regex: "agence nationale des titres securises", poids: 5 }
+      - { regex: "ants\\.gouv\\.fr", poids: 3 }
+      - { regex: "certificat d'immatriculation", poids: 2 }
+      - { regex: "pre-?demande", poids: 2 }
+      - { regex: "carte nationale d'identite", poids: 1 }
+  - id: france-travail
+    nom: France Travail
+    categorie: Aides sociales
+    critique: false
+    motifs:
+      - { regex: "france travail", poids: 5 }
+      - { regex: "pole emploi", poids: 4 }
+      - { regex: "\\b3949\\b", poids: 3 }
+
+  # ---------------------------------------------------------------- courrier et justice
+  - id: la-poste
+    nom: La Poste
+    categorie: Courrier
+    critique: false
+    motifs:
+      - { regex: "la poste\\b", poids: 4 }
+      - { regex: "reexpedition", poids: 3 }
+      - { regex: "laposte\\.fr", poids: 3 }
+      - { regex: "\\b3631\\b", poids: 3 }
+      - { regex: "identite numerique", poids: 2 }
+  - id: commissaire-de-justice
+    nom: Commissaire de justice (huissier)
+    categorie: Autre
+    critique: true
+    motifs:
+      - { regex: "commissaires? de justice", poids: 5 }
+      - { regex: "\\bhuissier\\b", poids: 5 }
+      - { regex: "sommation", poids: 3 }
+      - { regex: "signification", poids: 3 }
+      - { regex: "saisie", poids: 2 }
+      - { regex: "commandement de payer", poids: 4 }
+  - id: tribunal
+    nom: Tribunal judiciaire
+    categorie: Autre
+    critique: true
+    motifs:
+      - { regex: "tribunal judiciaire", poids: 5 }
+      - { regex: "\\btribunal\\b", poids: 3 }
+      - { regex: "juge des contentieux", poids: 4 }
+      - { regex: "\\bgreffe\\b", poids: 3 }
+      - { regex: "\\baudience\\b", poids: 2 }
+      - { regex: "juge des tutelles", poids: 4 }
+  - id: notaire
+    nom: Office notarial
+    categorie: Autre
+    critique: false
+    motifs:
+      - { regex: "\\bnotaire\\b", poids: 4 }
+      - { regex: "office notarial", poids: 5 }
+      - { regex: "\\betude\\b", poids: 1 }
+      - { regex: "acte de notoriete", poids: 3 }
+      - { regex: "declaration de succession", poids: 3 }
+
+  # ---------------------------------------------------------------- complémentaires santé et prévoyance
+  - id: harmonie-mutuelle
+    nom: Harmonie Mutuelle
+    categorie: Complémentaire santé
+    critique: false
+    motifs:
+      - { regex: "harmonie mutuelle", poids: 5 }
+      - { regex: "harmonie-mutuelle\\.fr", poids: 3 }
+      - { regex: "\\bmutuelle\\b", poids: 1 }
+  - id: mgen
+    nom: MGEN
+    categorie: Complémentaire santé
+    critique: false
+    motifs:
+      - { regex: "\\bmgen\\b", poids: 5 }
+      - { regex: "mutuelle generale de l'education nationale", poids: 5 }
+      - { regex: "mgen\\.fr", poids: 3 }
+  - id: malakoff-humanis
+    nom: Malakoff Humanis
+    categorie: Complémentaire santé
+    critique: false
+    motifs:
+      - { regex: "malakoff humanis", poids: 5 }
+      - { regex: "malakoffhumanis\\.com", poids: 3 }
+      - { regex: "institution de prevoyance", poids: 2 }
+  - id: ag2r
+    nom: AG2R La Mondiale
+    categorie: Complémentaire santé
+    critique: false
+    motifs:
+      - { regex: "ag2r", poids: 5 }
+      - { regex: "la mondiale", poids: 4 }
+      - { regex: "ag2rlamondiale\\.fr", poids: 3 }
+  - id: mutuelle-generique
+    nom: Mutuelle (autre)
+    categorie: Complémentaire santé
+    critique: false
+    motifs:
+      - { regex: "\\bmutuelle\\b", poids: 2 }
+      - { regex: "complementaire sante", poids: 2 }
+      - { regex: "code de la mutualite", poids: 3 }
+      - { regex: "tiers payant", poids: 1 }
+      - { regex: "tableau de garanties", poids: 2 }
+
+  # ---------------------------------------------------------------- assureurs
+  - id: axa
+    nom: AXA
+    categorie: Assurance
+    critique: false
+    motifs:
+      - { regex: "\\baxa\\b", poids: 5 }
+      - { regex: "axa\\.fr", poids: 3 }
+      - { regex: "\\bassurance\\b", poids: 1 }
+  - id: allianz
+    nom: Allianz
+    categorie: Assurance
+    critique: false
+    motifs:
+      - { regex: "\\ballianz\\b", poids: 5 }
+      - { regex: "allianz\\.fr", poids: 3 }
+  - id: maif
+    nom: MAIF
+    categorie: Assurance
+    critique: false
+    motifs:
+      - { regex: "\\bmaif\\b", poids: 5 }
+      - { regex: "maif\\.fr", poids: 3 }
+  - id: macif
+    nom: MACIF
+    categorie: Assurance
+    critique: false
+    motifs:
+      - { regex: "\\bmacif\\b", poids: 5 }
+      - { regex: "macif\\.fr", poids: 3 }
+  - id: groupama
+    nom: Groupama
+    categorie: Assurance
+    critique: false
+    motifs:
+      - { regex: "\\bgroupama\\b", poids: 5 }
+      - { regex: "groupama\\.fr", poids: 3 }
+  - id: matmut
+    nom: Matmut
+    categorie: Assurance
+    critique: false
+    motifs:
+      - { regex: "\\bmatmut\\b", poids: 5 }
+      - { regex: "matmut\\.fr", poids: 3 }
+  - id: assureur-generique
+    nom: Assureur (autre)
+    categorie: Assurance
+    critique: false
+    motifs:
+      - { regex: "contrat d'assurance", poids: 2 }
+      - { regex: "avis d'echeance", poids: 2 }
+      - { regex: "\\bsinistre\\b", poids: 2 }
+      - { regex: "\\bassureur\\b", poids: 2 }
+      - { regex: "code des assurances", poids: 3 }
+
+  # ---------------------------------------------------------------- énergie et eau
+  - id: edf
+    nom: EDF
+    categorie: Énergie
+    critique: false
+    motifs:
+      - { regex: "\\bedf\\b", poids: 5 }
+      - { regex: "electricite de france", poids: 4 }
+      - { regex: "particulier\\.edf\\.fr", poids: 3 }
+      - { regex: "tarif bleu", poids: 3 }
+      - { regex: "\\b3404\\b", poids: 2 }
+  - id: engie
+    nom: Engie
+    categorie: Énergie
+    critique: false
+    motifs:
+      - { regex: "\\bengie\\b", poids: 5 }
+      - { regex: "engie\\.fr", poids: 3 }
+      - { regex: "gaz naturel", poids: 1 }
+  - id: totalenergies
+    nom: TotalEnergies
+    categorie: Énergie
+    critique: false
+    motifs:
+      - { regex: "total ?energies", poids: 5 }
+      - { regex: "totalenergies\\.fr", poids: 3 }
+  - id: enedis
+    nom: Enedis (réseau électricité)
+    categorie: Énergie
+    critique: false
+    motifs:
+      - { regex: "\\benedis\\b", poids: 5 }
+      - { regex: "gestionnaire du reseau", poids: 2 }
+      - { regex: "\\blinky\\b", poids: 3 }
+      - { regex: "point de livraison", poids: 2 }
+  - id: grdf
+    nom: GRDF (réseau gaz)
+    categorie: Énergie
+    critique: false
+    motifs:
+      - { regex: "\\bgrdf\\b", poids: 5 }
+      - { regex: "gaz reseau distribution", poids: 4 }
+      - { regex: "\\bgazpar\\b", poids: 3 }
+  - id: eau
+    nom: Service des eaux (Veolia, Suez, régie)
+    categorie: Eau
+    critique: false
+    motifs:
+      - { regex: "\\bveolia\\b", poids: 5 }
+      - { regex: "\\bsuez\\b", poids: 5 }
+      - { regex: "eau du grand", poids: 4 }
+      - { regex: "service des eaux", poids: 4 }
+      - { regex: "regie des eaux", poids: 4 }
+      - { regex: "consommation d'eau", poids: 3 }
+      - { regex: "\\bm3\\b", poids: 1 }
+
+  # ---------------------------------------------------------------- télécom
+  - id: orange
+    nom: Orange
+    categorie: Télécom
+    critique: false
+    motifs:
+      - { regex: "\\borange\\b", poids: 4 }
+      - { regex: "orange\\.fr", poids: 3 }
+      - { regex: "\\blivebox\\b", poids: 4 }
+      - { regex: "\\b3900\\b", poids: 3 }
+  - id: sfr
+    nom: SFR
+    categorie: Télécom
+    critique: false
+    motifs:
+      - { regex: "\\bsfr\\b", poids: 5 }
+      - { regex: "sfr\\.fr", poids: 3 }
+      - { regex: "\\b1023\\b", poids: 3 }
+  - id: bouygues-telecom
+    nom: Bouygues Telecom
+    categorie: Télécom
+    critique: false
+    motifs:
+      - { regex: "bouygues telecom", poids: 5 }
+      - { regex: "\\bbbox\\b", poids: 4 }
+      - { regex: "bouyguestelecom\\.fr", poids: 3 }
+      - { regex: "\\b1064\\b", poids: 3 }
+  - id: free
+    nom: Free
+    categorie: Télécom
+    critique: false
+    motifs:
+      - { regex: "\\bfree\\b", poids: 3 }
+      - { regex: "\\bfreebox\\b", poids: 5 }
+      - { regex: "free mobile", poids: 4 }
+      - { regex: "free\\.fr", poids: 3 }
+      - { regex: "\\b3244\\b", poids: 3 }
+
+  # ---------------------------------------------------------------- banques
+  - id: credit-agricole
+    nom: Crédit Agricole
+    categorie: Banque
+    critique: false
+    motifs:
+      - { regex: "credit agricole", poids: 5 }
+      - { regex: "credit-agricole\\.fr", poids: 3 }
+      - { regex: "\\bcaisse regionale\\b", poids: 2 }
+  - id: bnp-paribas
+    nom: BNP Paribas
+    categorie: Banque
+    critique: false
+    motifs:
+      - { regex: "bnp paribas", poids: 5 }
+      - { regex: "\\bbnp\\b", poids: 4 }
+      - { regex: "mabanque\\.bnpparibas", poids: 3 }
+  - id: societe-generale
+    nom: Société Générale
+    categorie: Banque
+    critique: false
+    motifs:
+      - { regex: "societe generale", poids: 5 }
+      - { regex: "societegenerale\\.fr", poids: 3 }
+  - id: la-banque-postale
+    nom: La Banque Postale
+    categorie: Banque
+    critique: false
+    motifs:
+      - { regex: "banque postale", poids: 5 }
+      - { regex: "labanquepostale\\.fr", poids: 3 }
+      - { regex: "centre financier", poids: 3 }
+  - id: caisse-epargne
+    nom: Caisse d'Épargne
+    categorie: Banque
+    critique: false
+    motifs:
+      - { regex: "caisse d'epargne", poids: 5 }
+      - { regex: "caisse-epargne\\.fr", poids: 3 }
+      - { regex: "livret a", poids: 1 }
+  - id: credit-mutuel
+    nom: Crédit Mutuel
+    categorie: Banque
+    critique: false
+    motifs:
+      - { regex: "credit mutuel", poids: 5 }
+      - { regex: "creditmutuel\\.fr", poids: 3 }
+  - id: cic
+    nom: CIC
+    categorie: Banque
+    critique: false
+    motifs:
+      - { regex: "\\bcic\\b", poids: 5 }
+      - { regex: "credit industriel et commercial", poids: 5 }
+      - { regex: "cic\\.fr", poids: 3 }
+  - id: lcl
+    nom: LCL
+    categorie: Banque
+    critique: false
+    motifs:
+      - { regex: "\\blcl\\b", poids: 5 }
+      - { regex: "credit lyonnais", poids: 5 }
+      - { regex: "lcl\\.fr", poids: 3 }
+  - id: banque-generique
+    nom: Banque (autre)
+    categorie: Banque
+    critique: false
+    motifs:
+      - { regex: "releve de compte", poids: 3 }
+      - { regex: "\\biban\\b", poids: 2 }
+      - { regex: "votre conseiller", poids: 1 }
+      - { regex: "\\bagence\\b", poids: 1 }
+      - { regex: "frais bancaires", poids: 2 }
+      - { regex: "\\bbanque\\b", poids: 2 }
+
+  # ---------------------------------------------------------------- logement et copropriété
+  - id: foncia
+    nom: Foncia (syndic)
+    categorie: Copropriété
+    critique: false
+    motifs:
+      - { regex: "\\bfoncia\\b", poids: 5 }
+      - { regex: "myfoncia", poids: 3 }
+      - { regex: "\\bsyndic\\b", poids: 2 }
+  - id: nexity
+    nom: Nexity (syndic)
+    categorie: Copropriété
+    critique: false
+    motifs:
+      - { regex: "\\bnexity\\b", poids: 5 }
+      - { regex: "\\bsyndic\\b", poids: 2 }
+  - id: citya
+    nom: Citya (syndic)
+    categorie: Copropriété
+    critique: false
+    motifs:
+      - { regex: "\\bcitya\\b", poids: 5 }
+      - { regex: "\\bsyndic\\b", poids: 2 }
+  - id: syndic-generique
+    nom: Syndic de copropriété (autre)
+    categorie: Copropriété
+    critique: false
+    motifs:
+      - { regex: "\\bsyndic\\b", poids: 3 }
+      - { regex: "assemblee generale", poids: 3 }
+      - { regex: "appel de fonds", poids: 3 }
+      - { regex: "copropriete", poids: 3 }
+      - { regex: "charges de copropriete", poids: 3 }
+      - { regex: "\\btantiemes\\b", poids: 3 }
+  - id: bailleur-social
+    nom: Bailleur social (office HLM)
+    categorie: Logement
+    critique: false
+    motifs:
+      - { regex: "office public de l'habitat", poids: 5 }
+      - { regex: "\\bhlm\\b", poids: 4 }
+      - { regex: "\\bhabitat\\b", poids: 2 }
+      - { regex: "\\bquittance\\b", poids: 2 }
+      - { regex: "avis d'echeance de loyer", poids: 3 }
+      - { regex: "\\bloyer\\b", poids: 2 }
+
+types:
+  # Ordre = priorité décroissante en cas d'égalité de score.
+  - nom: Mise en demeure
+    marqueurs:
+      - { regex: "mise en demeure", poids: 6 }
+      - { regex: "mettons en demeure", poids: 6 }
+      - { regex: "dernier avis avant", poids: 5 }
+      - { regex: "expulsion", poids: 3 }
+      - { regex: "commandement de payer", poids: 6 }
+      - { regex: "sous peine de", poids: 3 }
+      - { regex: "poursuites", poids: 3 }
+      - { regex: "recouvrement contentieux", poids: 4 }
+      - { regex: "majoration de 10 ?%", poids: 3 }
+  - nom: Convocation
+    marqueurs:
+      - { regex: "convocation", poids: 6 }
+      - { regex: "vous etes convoque", poids: 6 }
+      - { regex: "rendez-?vous (est )?fixe", poids: 4 }
+      - { regex: "vous presenter le", poids: 4 }
+      - { regex: "assemblee generale", poids: 3 }
+      - { regex: "ordre du jour", poids: 3 }
+      - { regex: "visite (a domicile|d'evaluation)", poids: 3 }
+  - nom: Relance
+    marqueurs:
+      - { regex: "\\brelances?\\b", poids: 5 }
+      - { regex: "rappel", poids: 3 }
+      - { regex: "reste(nt)? impaye", poids: 4 }
+      - { regex: "n'avons pas (recu|enregistre) (votre|le) (reglement|paiement)", poids: 5 }
+      - { regex: "sauf erreur", poids: 3 }
+      - { regex: "impaye", poids: 3 }
+      - { regex: "regularis", poids: 2 }
+  - nom: Demande de pièces
+    marqueurs:
+      - { regex: "pieces? (justificatives?|manquantes?|a fournir)", poids: 5 }
+      - { regex: "nous (vous )?(remercions|demandons) de (nous )?(retourner|transmettre|adresser|fournir)", poids: 4 }
+      - { regex: "justificatifs?", poids: 3 }
+      - { regex: "dossier incomplet", poids: 5 }
+      - { regex: "merci de (nous )?(retourner|renvoyer|joindre)", poids: 4 }
+      - { regex: "documents? (suivants?|demandes?)", poids: 3 }
+      - { regex: "questionnaire", poids: 2 }
+  - nom: Facture
+    marqueurs:
+      - { regex: "\\bfacture\\b", poids: 5 }
+      - { regex: "montant a payer", poids: 3 }
+      - { regex: "montant a regler", poids: 3 }
+      - { regex: "date limite de paiement", poids: 3 }
+      - { regex: "avis d'echeance", poids: 4 }
+      - { regex: "appel de (fonds|cotisation)", poids: 4 }
+      - { regex: "avis de somme a payer", poids: 4 }
+      - { regex: "echeancier", poids: 2 }
+      - { regex: "prelevement", poids: 1 }
+      - { regex: "\\bttc\\b", poids: 2 }
+  - nom: Décision
+    marqueurs:
+      - { regex: "\\bdecision\\b", poids: 5 }
+      - { regex: "notification", poids: 4 }
+      - { regex: "(vous est|est) (accorde|attribue|refuse|rejete)", poids: 5 }
+      - { regex: "avons le plaisir de vous informer", poids: 3 }
+      - { regex: "avons le regret", poids: 3 }
+      - { regex: "voies et delais de recours", poids: 4 }
+      - { regex: "recours", poids: 2 }
+      - { regex: "a compter du", poids: 1 }
+  - nom: Information
+    marqueurs:
+      - { regex: "pour information", poids: 4 }
+      - { regex: "attestation", poids: 4 }
+      - { regex: "releve", poids: 3 }
+      - { regex: "nous vous informons", poids: 3 }
+      - { regex: "compte rendu", poids: 3 }
+      - { regex: "accuse de reception", poids: 4 }
+      - { regex: "aucune action de votre part", poids: 5 }
+      - { regex: "a conserver", poids: 3 }
+      - { regex: "nouveautes|newsletter|offre speciale", poids: 3 }
+
+urgence:
+  base_par_type:
+    "Mise en demeure": 4
+    "Convocation": 3
+    "Relance": 3
+    "Demande de pièces": 3
+    "Facture": 2
+    "Décision": 2
+    "Information": 1
+    "Autre": 2
+  modificateurs:
+    delai_depasse: { niveau_minimum: 4, motif: "date limite dépassée" }
+    delai_7_jours: { ajout: 1, motif: "date limite sous 7 jours" }
+    delai_15_jours: { ajout: 0, motif: "date limite sous 15 jours" }
+    montant_eleve: { seuil: 500, ajout: 1, motif: "montant supérieur à 500 €", types_concernes: ["Facture", "Relance", "Mise en demeure"] }
+    organisme_critique: { ajout: 1, motif: "organisme à enjeu (impôts, recouvrement, justice)" }
+    mots_cles_sanction:
+      ajout: 1
+      motif: "mention d'une sanction ou d'une interruption de droits"
+      regex:
+        - "suspension"
+        - "radiation"
+        - "\\bsaisie\\b"
+        - "coupure"
+        - "resiliation (de plein droit|du contrat)"
+        - "penalite"
+        - "majoration"
+        - "interruption (de|des) (droits|versements)"
+        - "expulsion"
+        - "commandement"
+    information_sans_delai: { niveau_maximum: 1, motif: "information sans délai d'action" }

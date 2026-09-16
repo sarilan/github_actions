@@ -1,0 +1,19 @@
+EDF — Électricité de France
+Service Clients Particuliers — TSA 20012 — 41975 Blois Cedex 9
+particulier.edf.fr — 3404
+
+Votre facture d'électricité
+Facture n° 2026-8891 du 8 septembre 2026
+N° client : 3 456 789 012
+Point de livraison : 09876543210987
+Tarif Bleu — option Base — puissance 6 kVA
+
+Période de consommation : du 05/03/2026 au 04/09/2026 (consommation estimée)
+Consommation : 2 310 kWh
+
+Abonnement : 78,45 € TTC
+Consommation : 407,85 € TTC
+Montant à payer : 486,30 € TTC
+Date limite de paiement : le 02/10/2026
+
+Prélèvement automatique le 02/10/2026 sur votre compte se terminant par 4521.

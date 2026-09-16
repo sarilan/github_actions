@@ -1,0 +1,193 @@
+# Valeurs attendues par courrier du corpus (date de référence des tests : 2026-09-16)
+01-cpam-demande-pieces:
+  date_limite_principale: '2026-10-15'
+  montant_principal: null
+  organisme: cpam
+  type: Demande de pièces
+  urgence: 3
+02-edf-facture:
+  date_limite_principale: '2026-10-02'
+  montant_principal: 486.3
+  organisme: edf
+  type: Facture
+  urgence: 2
+03-orange-mise-en-demeure:
+  date_limite_principale: '2026-09-24'
+  montant_principal: 134.97
+  organisme: orange
+  type: Mise en demeure
+  urgence: 4
+04-caf-decision-apl:
+  date_limite_principale: null
+  montant_principal: 212.0
+  organisme: caf
+  type: Décision
+  urgence: 2
+05-agirc-arrco-attestation:
+  date_limite_principale: null
+  montant_principal: 4920.0
+  organisme: agirc-arrco
+  type: Information
+  urgence: 1
+06-conseil-departemental-apa-notification:
+  date_limite_principale: null
+  montant_principal: 612.4
+  organisme: conseil-departemental
+  type: Décision
+  urgence: 2
+07-foncia-convocation-ag:
+  date_limite_principale: '2026-10-03'
+  montant_principal: 3400.0
+  organisme: foncia
+  type: Convocation
+  urgence: 3
+08-dgfip-degrevement:
+  date_limite_principale: null
+  montant_principal: 640.0
+  organisme: dgfip
+  type: Décision
+  urgence: 3
+09-veolia-facture-eau:
+  date_limite_principale: '2026-10-12'
+  montant_principal: 128.6
+  organisme: eau
+  type: Facture
+  urgence: 2
+10-harmonie-mutuelle-relance:
+  date_limite_principale: '2026-09-30'
+  montant_principal: 282.0
+  organisme: harmonie-mutuelle
+  type: Relance
+  urgence: 3
+11-commissaire-justice-commandement:
+  date_limite_principale: '2026-09-23'
+  montant_principal: 1842.15
+  organisme: commissaire-de-justice
+  type: Mise en demeure
+  urgence: 4
+12-assurance-retraite-attestation:
+  date_limite_principale: null
+  montant_principal: 14160.0
+  organisme: assurance-retraite
+  type: Information
+  urgence: 1
+13-ants-information-titre:
+  date_limite_principale: '2026-12-14'
+  montant_principal: null
+  organisme: ants
+  type: Information
+  urgence: 1
+14-tresor-public-avis-somme:
+  date_limite_principale: '2026-10-15'
+  montant_principal: 96.0
+  organisme: tresor-public
+  type: Facture
+  urgence: 3
+15-mairie-convocation-cni:
+  date_limite_principale: '2026-09-29'
+  montant_principal: null
+  organisme: mairie-ccas
+  type: Convocation
+  urgence: 3
+16-tribunal-convocation:
+  date_limite_principale: '2026-11-05'
+  montant_principal: null
+  organisme: tribunal
+  type: Convocation
+  urgence: 4
+17-hopital-compte-rendu:
+  date_limite_principale: null
+  montant_principal: null
+  organisme: hopital
+  type: Information
+  urgence: 1
+18-la-poste-reexpedition:
+  date_limite_principale: '2027-03-15'
+  montant_principal: 87.0
+  organisme: la-poste
+  type: Information
+  urgence: 1
+19-engie-facture:
+  date_limite_principale: '2026-10-05'
+  montant_principal: 214.9
+  organisme: engie
+  type: Facture
+  urgence: 2
+20-msa-decision-pension:
+  date_limite_principale: null
+  montant_principal: 742.0
+  organisme: msa
+  type: Décision
+  urgence: 2
+21-nexity-appel-de-fonds:
+  date_limite_principale: '2026-10-01'
+  montant_principal: 630.0
+  organisme: nexity
+  type: Facture
+  urgence: 3
+22-credit-agricole-demande-pieces:
+  date_limite_principale: '2026-10-14'
+  montant_principal: null
+  organisme: credit-agricole
+  type: Demande de pièces
+  urgence: 3
+23-mgen-information:
+  date_limite_principale: null
+  montant_principal: null
+  organisme: mgen
+  type: Information
+  urgence: 1
+24-axa-avis-echeance:
+  date_limite_principale: '2026-11-01'
+  montant_principal: 312.5
+  organisme: axa
+  type: Facture
+  urgence: 2
+25-free-relance:
+  date_limite_principale: '2026-09-26'
+  montant_principal: 59.98
+  organisme: free
+  type: Relance
+  urgence: 3
+26-bnp-information-releve:
+  date_limite_principale: null
+  montant_principal: 12.5
+  organisme: bnp-paribas
+  type: Information
+  urgence: 1
+27-bailleur-social-mise-en-demeure:
+  date_limite_principale: '2026-09-30'
+  montant_principal: 1250.0
+  organisme: bailleur-social
+  type: Mise en demeure
+  urgence: 4
+28-prefecture-information:
+  date_limite_principale: null
+  montant_principal: null
+  organisme: prefecture
+  type: Information
+  urgence: 1
+29-maif-sinistre-demande-pieces:
+  date_limite_principale: '2026-10-16'
+  montant_principal: null
+  organisme: maif
+  type: Demande de pièces
+  urgence: 3
+30-inconnu-publicite:
+  date_limite_principale: null
+  montant_principal: null
+  organisme: null
+  type: Information
+  urgence: 1
+31-cpam-convocation-service-medical:
+  date_limite_principale: '2026-09-25'
+  montant_principal: null
+  organisme: cpam
+  type: Convocation
+  urgence: 3
+32-sfr-facture:
+  date_limite_principale: '2026-10-08'
+  montant_principal: 29.99
+  organisme: sfr
+  type: Facture
+  urgence: 2
