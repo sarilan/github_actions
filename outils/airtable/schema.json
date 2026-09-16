@@ -1,0 +1,253 @@
+{
+  "base": {
+    "name": "Relais — Gestion",
+    "description": "Base de gestion du service Relais : clients (enfant + parent), organismes et contrats, démarches, courriers. Source de vérité pour le rapport mensuel."
+  },
+  "operateurs": ["Fondateur", "Opérateur 1", "Opérateur 2", "Opérateur 3"],
+  "urgences": ["1 - Faible", "2 - Normale", "3 - Élevée", "4 - Critique"],
+  "tables": [
+    {
+      "name": "Clients",
+      "description": "Un enregistrement par dossier client : l'enfant (client payeur) et le parent (bénéficiaire), le mandat, l'offre et le mode de réception du courrier.",
+      "fields": [
+        { "name": "Dossier", "type": "singleLineText", "description": "Nom du dossier, ex. « Durand — Sarcelles ». Champ principal." },
+        { "name": "Statut", "type": "singleSelect", "options": { "choices": [
+          { "name": "Prospect", "color": "grayLight2" },
+          { "name": "Mandat envoyé", "color": "yellowLight2" },
+          { "name": "Diagnostic", "color": "orangeLight2" },
+          { "name": "Actif", "color": "greenLight2" },
+          { "name": "Suspendu", "color": "redLight2" },
+          { "name": "Clôturé", "color": "grayLight1" },
+          { "name": "Décédé — succession", "color": "purpleLight2" }
+        ] } },
+        { "name": "Enfant — Prénom Nom", "type": "singleLineText" },
+        { "name": "Enfant — Courriel", "type": "email" },
+        { "name": "Enfant — Téléphone", "type": "phoneNumber" },
+        { "name": "Enfant — Pays", "type": "singleSelect", "options": { "choices": [
+          { "name": "Israël" }, { "name": "Suisse" }, { "name": "Belgique" }, { "name": "Luxembourg" },
+          { "name": "Royaume-Uni" }, { "name": "États-Unis" }, { "name": "Canada" }, { "name": "Émirats arabes unis" },
+          { "name": "Singapour" }, { "name": "Hong Kong" }, { "name": "Autre" }
+        ] } },
+        { "name": "Enfant — Fuseau horaire", "type": "singleLineText", "description": "Ex. « UTC+3 (Israël) »" },
+        { "name": "Parent — Prénom Nom", "type": "singleLineText" },
+        { "name": "Parent — Date de naissance", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } } },
+        { "name": "Parent — Adresse", "type": "multilineText" },
+        { "name": "Parent — Ville", "type": "singleLineText" },
+        { "name": "Parent — Département", "type": "singleLineText", "description": "Numéro du département, ex. « 95 »" },
+        { "name": "Parent — Téléphone", "type": "phoneNumber" },
+        { "name": "Parent — Situation", "type": "singleSelect", "options": { "choices": [
+          { "name": "Seul(e) à domicile" }, { "name": "En couple à domicile" }, { "name": "Résidence autonomie" }, { "name": "EHPAD" }
+        ] } },
+        { "name": "Mandat signé le", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } } },
+        { "name": "Mandat — Échéance", "type": "formula", "options": { "formula": "IF({Mandat signé le}, DATEADD({Mandat signé le}, 12, 'months'), BLANK())" }, "description": "Date de tacite reconduction (12 mois). Champ calculé." },
+        { "name": "Mandat — Organismes cochés", "type": "multipleSelects", "options": { "choices": [
+          { "name": "FranceConnect" }, { "name": "Ameli" }, { "name": "L'Assurance retraite" }, { "name": "Agirc-Arrco" }, { "name": "MSA" },
+          { "name": "impots.gouv.fr" }, { "name": "ANTS" }, { "name": "CAF" }, { "name": "Conseil départemental" }, { "name": "Mairie / CCAS" },
+          { "name": "Mutuelle" }, { "name": "Assurance habitation" }, { "name": "Assurance auto" }, { "name": "Électricité" }, { "name": "Gaz" },
+          { "name": "Eau" }, { "name": "Téléphonie" }, { "name": "Internet" }, { "name": "Syndic" }, { "name": "Banque (consultation)" }, { "name": "La Poste" }
+        ] } },
+        { "name": "Consentement données de santé", "type": "checkbox", "options": { "icon": "check", "color": "greenBright" } },
+        { "name": "Offre", "type": "singleSelect", "options": { "choices": [
+          { "name": "Abonnement 89 €/mois" }, { "name": "Tarif fondateur 59 €/mois" }, { "name": "Démarche isolée 79 €" }
+        ] } },
+        { "name": "Forfaits souscrits", "type": "multipleSelects", "options": { "choices": [
+          { "name": "Diagnostic 149 €" }, { "name": "Hospitalisation 490 €" }, { "name": "Entrée en EHPAD 690 €" }, { "name": "Succession 890 €" }
+        ] } },
+        { "name": "Mode de réception du courrier", "type": "singleSelect", "options": { "choices": [
+          { "name": "Réexpédition La Poste" }, { "name": "Scan par un proche" }, { "name": "Scan par le parent" }
+        ] } },
+        { "name": "Opérateur", "type": "singleSelect", "options": { "choices": [
+          { "name": "Fondateur" }, { "name": "Opérateur 1" }, { "name": "Opérateur 2" }, { "name": "Opérateur 3" }
+        ] } },
+        { "name": "Coffre Bitwarden", "type": "singleLineText", "description": "Nom de la collection Bitwarden du client. Jamais d'identifiant ici." },
+        { "name": "Prochain appel trimestriel", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } } },
+        { "name": "Notes", "type": "multilineText" },
+        { "name": "Créé le", "type": "createdTime" }
+      ]
+    },
+    {
+      "name": "Organismes",
+      "description": "Tous les comptes et contrats d'un client : un enregistrement par organisme et par client (ex. « CPAM 95 — Durand »).",
+      "fields": [
+        { "name": "Nom", "type": "singleLineText", "description": "« Organisme — Dossier », ex. « CPAM 95 — Durand ». Champ principal." },
+        { "name": "Catégorie", "type": "singleSelect", "options": { "choices": [
+          { "name": "Santé" }, { "name": "Retraite" }, { "name": "Impôts" }, { "name": "Aides sociales" }, { "name": "Titres d'identité" },
+          { "name": "Complémentaire santé" }, { "name": "Assurance" }, { "name": "Énergie" }, { "name": "Eau" }, { "name": "Télécom" },
+          { "name": "Banque" }, { "name": "Logement" }, { "name": "Copropriété" }, { "name": "Mairie / CCAS" }, { "name": "Courrier" }, { "name": "Autre" }
+        ] } },
+        { "name": "Organisme", "type": "singleSelect", "options": { "choices": [
+          { "name": "CPAM" }, { "name": "L'Assurance retraite (CARSAT / CNAV)" }, { "name": "Agirc-Arrco" }, { "name": "MSA" }, { "name": "DGFiP" },
+          { "name": "CAF" }, { "name": "Conseil départemental" }, { "name": "ANTS" }, { "name": "Mutuelle" }, { "name": "Assureur" },
+          { "name": "EDF" }, { "name": "Engie" }, { "name": "TotalEnergies" }, { "name": "Autre fournisseur d'énergie" }, { "name": "Service des eaux" },
+          { "name": "Orange" }, { "name": "SFR" }, { "name": "Bouygues Telecom" }, { "name": "Free" }, { "name": "Banque" },
+          { "name": "Syndic" }, { "name": "Bailleur" }, { "name": "Mairie / CCAS" }, { "name": "La Poste" }, { "name": "EHPAD / résidence" }, { "name": "Autre" }
+        ] } },
+        { "name": "Référence", "type": "singleLineText", "description": "N° d'adhérent, d'allocataire, de contrat, de dossier. Jamais de mot de passe." },
+        { "name": "Espace en ligne", "type": "url" },
+        { "name": "Accès dans le coffre", "type": "checkbox", "options": { "icon": "check", "color": "greenBright" } },
+        { "name": "2FA vers ligne Relais", "type": "checkbox", "options": { "icon": "check", "color": "blueBright" } },
+        { "name": "Mandat accepté", "type": "singleSelect", "options": { "choices": [
+          { "name": "Oui" }, { "name": "Non" }, { "name": "Inconnu" }, { "name": "Appel à trois nécessaire" }
+        ] } },
+        { "name": "Montant mensuel", "type": "currency", "options": { "precision": 2, "symbol": "€" }, "description": "Cotisation, pension ou facture moyenne mensuelle (positif = versé au parent, négatif = payé par le parent)." },
+        { "name": "Date clé", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } }, "description": "Échéance du contrat, date d'expiration du titre, date anniversaire." },
+        { "name": "Date clé dans (jours)", "type": "formula", "options": { "formula": "IF({Date clé}, DATETIME_DIFF({Date clé}, TODAY(), 'days'), BLANK())" }, "description": "Champ calculé." },
+        { "name": "Téléphone", "type": "phoneNumber" },
+        { "name": "Adresse", "type": "multilineText" },
+        { "name": "Notes", "type": "multilineText" }
+      ]
+    },
+    {
+      "name": "Démarches",
+      "description": "Chaque action menée pour un client : type, procédure suivie, statut, échéance, montant obtenu, pièces. Alimente les vues d'échéances et le rapport mensuel.",
+      "fields": [
+        { "name": "Titre", "type": "singleLineText", "description": "Ex. « Demande APA à domicile ». Champ principal." },
+        { "name": "Type", "type": "singleSelect", "options": { "choices": [
+          { "name": "Récupération d'accès" }, { "name": "Attestation" }, { "name": "Demande de droits" }, { "name": "Déclaration" },
+          { "name": "Réclamation" }, { "name": "Résiliation" }, { "name": "Changement de contrat" }, { "name": "Rendez-vous" },
+          { "name": "Courrier à traiter" }, { "name": "Information" }, { "name": "Succession" }, { "name": "Autre" }
+        ] } },
+        { "name": "Procédure", "type": "singleSelect", "options": { "choices": [
+          { "name": "01 FranceConnect" }, { "name": "02 Ameli" }, { "name": "03 Retraite" }, { "name": "04 Impôts" }, { "name": "05 APA" },
+          { "name": "06 Aides au logement" }, { "name": "07 ANTS" }, { "name": "08 Mutuelle" }, { "name": "09 Énergie / télécom" },
+          { "name": "10 Banque" }, { "name": "11 Copropriété" }, { "name": "12 Décès" }, { "name": "Hors procédure" }
+        ] } },
+        { "name": "Statut", "type": "singleSelect", "options": { "choices": [
+          { "name": "À faire", "color": "grayLight2" },
+          { "name": "En cours", "color": "blueLight2" },
+          { "name": "En attente organisme", "color": "yellowLight2" },
+          { "name": "En attente enfant", "color": "orangeLight2" },
+          { "name": "En attente parent", "color": "orangeLight2" },
+          { "name": "Terminée", "color": "greenLight2" },
+          { "name": "Abandonnée", "color": "redLight2" }
+        ] } },
+        { "name": "Urgence", "type": "singleSelect", "options": { "choices": [
+          { "name": "1 - Faible", "color": "grayLight2" }, { "name": "2 - Normale", "color": "blueLight2" },
+          { "name": "3 - Élevée", "color": "orangeLight2" }, { "name": "4 - Critique", "color": "redLight2" }
+        ] } },
+        { "name": "Échéance", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } } },
+        { "name": "Jours avant échéance", "type": "formula", "options": { "formula": "IF({Échéance}, DATETIME_DIFF({Échéance}, TODAY(), 'days'), BLANK())" }, "description": "Champ calculé : négatif = en retard." },
+        { "name": "Statut couleur", "type": "formula", "options": { "formula": "IF(OR({Statut} = 'Terminée', {Statut} = 'Abandonnée'), '🟢 Close', IF({Échéance} = BLANK(), '⚪ Sans échéance', IF({Jours avant échéance} < 0, '🔴 En retard', IF({Jours avant échéance} <= 7, '🟠 Sous 7 jours', IF({Jours avant échéance} <= 30, '🟡 Sous 30 jours', '🔵 Planifiée')))))" }, "description": "Champ calculé : pastille de couleur selon l'échéance et le statut." },
+        { "name": "Prochaine étape", "type": "singleLineText" },
+        { "name": "Référence dossier", "type": "singleLineText" },
+        { "name": "Montant en jeu", "type": "currency", "options": { "precision": 2, "symbol": "€" } },
+        { "name": "Montant obtenu", "type": "currency", "options": { "precision": 2, "symbol": "€" }, "description": "Aide obtenue, remboursement récupéré ou économie annuelle réalisée." },
+        { "name": "Résultat", "type": "multilineText" },
+        { "name": "Pièces", "type": "multipleAttachments" },
+        { "name": "Opérateur", "type": "singleSelect", "options": { "choices": [
+          { "name": "Fondateur" }, { "name": "Opérateur 1" }, { "name": "Opérateur 2" }, { "name": "Opérateur 3" }
+        ] } },
+        { "name": "Décision enfant requise", "type": "checkbox", "options": { "icon": "flag", "color": "orangeBright" } },
+        { "name": "À inclure au rapport", "type": "checkbox", "options": { "icon": "check", "color": "greenBright" } },
+        { "name": "Terminée le", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } } },
+        { "name": "Mois de clôture", "type": "formula", "options": { "formula": "IF({Terminée le}, DATETIME_FORMAT({Terminée le}, 'YYYY-MM'), '')" }, "description": "Champ calculé, ex. « 2026-09 », pour la vue Rapport du mois et generate_report.py." },
+        { "name": "Créée le", "type": "createdTime" },
+        { "name": "Modifiée le", "type": "lastModifiedTime" }
+      ]
+    },
+    {
+      "name": "Courriers",
+      "description": "Chaque document reçu (scan ou photo), classé par organisme, type et urgence ; le script classify.py peut créer ces enregistrements.",
+      "fields": [
+        { "name": "Titre", "type": "singleLineText", "description": "« AAAA-MM-JJ — Organisme — Type ». Champ principal." },
+        { "name": "Reçu le", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } } },
+        { "name": "Date du document", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } } },
+        { "name": "Type", "type": "singleSelect", "options": { "choices": [
+          { "name": "Facture" }, { "name": "Relance" }, { "name": "Mise en demeure" }, { "name": "Demande de pièces" },
+          { "name": "Information" }, { "name": "Décision" }, { "name": "Convocation" }, { "name": "Autre" }
+        ] } },
+        { "name": "Urgence", "type": "singleSelect", "options": { "choices": [
+          { "name": "1 - Faible", "color": "grayLight2" }, { "name": "2 - Normale", "color": "blueLight2" },
+          { "name": "3 - Élevée", "color": "orangeLight2" }, { "name": "4 - Critique", "color": "redLight2" }
+        ] } },
+        { "name": "Date limite", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } } },
+        { "name": "Montant", "type": "currency", "options": { "precision": 2, "symbol": "€" } },
+        { "name": "Référence", "type": "singleLineText" },
+        { "name": "Statut", "type": "singleSelect", "options": { "choices": [
+          { "name": "Non traité", "color": "redLight2" }, { "name": "En cours", "color": "yellowLight2" },
+          { "name": "Traité", "color": "greenLight2" }, { "name": "Classé sans suite", "color": "grayLight2" }
+        ] } },
+        { "name": "Scan", "type": "multipleAttachments" },
+        { "name": "Résumé", "type": "multilineText" },
+        { "name": "Classification automatique", "type": "multilineText", "description": "JSON produit par outils/courrier/classify.py." },
+        { "name": "Confiance classification", "type": "percent", "options": { "precision": 0 } },
+        { "name": "Traité le", "type": "date", "options": { "dateFormat": { "name": "european", "format": "D/M/YYYY" } } },
+        { "name": "Délai de traitement (jours)", "type": "formula", "options": { "formula": "IF(AND({Reçu le}, {Traité le}), DATETIME_DIFF({Traité le}, {Reçu le}, 'days'), BLANK())" }, "description": "Champ calculé : indicateur de pilotage (objectif < 2 jours ouvrés)." },
+        { "name": "Alerte 48 h", "type": "formula", "options": { "formula": "IF(AND({Statut} != 'Traité', {Statut} != 'Classé sans suite', {Reçu le}, DATETIME_DIFF(TODAY(), {Reçu le}, 'days') > 2), '⚠️ Plus de 48 h', '')" }, "description": "Champ calculé." },
+        { "name": "Opérateur", "type": "singleSelect", "options": { "choices": [
+          { "name": "Fondateur" }, { "name": "Opérateur 1" }, { "name": "Opérateur 2" }, { "name": "Opérateur 3" }
+        ] } }
+      ]
+    }
+  ],
+  "links": [
+    { "from_table": "Organismes", "field": "Client", "to_table": "Clients", "inverse_field": "Organismes", "prefers_single_record_link": true },
+    { "from_table": "Démarches", "field": "Client", "to_table": "Clients", "inverse_field": "Démarches", "prefers_single_record_link": true },
+    { "from_table": "Démarches", "field": "Organisme", "to_table": "Organismes", "inverse_field": "Démarches", "prefers_single_record_link": true },
+    { "from_table": "Courriers", "field": "Client", "to_table": "Clients", "inverse_field": "Courriers", "prefers_single_record_link": true },
+    { "from_table": "Courriers", "field": "Organisme", "to_table": "Organismes", "inverse_field": "Courriers", "prefers_single_record_link": true },
+    { "from_table": "Courriers", "field": "Démarche", "to_table": "Démarches", "inverse_field": "Courriers", "prefers_single_record_link": true }
+  ],
+  "views": [
+    {
+      "table": "Démarches",
+      "name": "Échéances 30 jours",
+      "type": "grid",
+      "filter": "AND({Statut} != 'Terminée', {Statut} != 'Abandonnée', {Échéance}, {Jours avant échéance} <= 30)",
+      "sort": [ { "field": "Échéance", "direction": "asc" } ],
+      "group_by": null,
+      "fields_visible": ["Titre", "Client", "Organisme", "Statut couleur", "Échéance", "Jours avant échéance", "Urgence", "Prochaine étape", "Opérateur", "Décision enfant requise"],
+      "description": "Tout ce qui expire dans les 30 jours ou est déjà en retard, toutes démarches confondues."
+    },
+    {
+      "table": "Démarches",
+      "name": "Démarches en cours",
+      "type": "grid",
+      "filter": "AND({Statut} != 'Terminée', {Statut} != 'Abandonnée')",
+      "sort": [ { "field": "Urgence", "direction": "desc" }, { "field": "Échéance", "direction": "asc" } ],
+      "group_by": "Statut",
+      "fields_visible": ["Titre", "Client", "Organisme", "Type", "Procédure", "Statut couleur", "Échéance", "Prochaine étape", "Opérateur"],
+      "description": "Vue de travail quotidienne, groupée par statut (à faire, en cours, en attente…)."
+    },
+    {
+      "table": "Courriers",
+      "name": "Courrier non traité",
+      "type": "grid",
+      "filter": "OR({Statut} = 'Non traité', {Statut} = 'En cours')",
+      "sort": [ { "field": "Urgence", "direction": "desc" }, { "field": "Reçu le", "direction": "asc" } ],
+      "group_by": null,
+      "fields_visible": ["Titre", "Client", "Organisme", "Type", "Urgence", "Date limite", "Montant", "Reçu le", "Alerte 48 h", "Démarche", "Opérateur"],
+      "description": "File d'attente du courrier, les plus urgents et les plus anciens en premier ; l'alerte 48 h signale les dépassements."
+    },
+    {
+      "table": "Démarches",
+      "name": "Par client",
+      "type": "grid",
+      "filter": null,
+      "sort": [ { "field": "Échéance", "direction": "asc" } ],
+      "group_by": "Client",
+      "fields_visible": ["Titre", "Organisme", "Type", "Statut", "Statut couleur", "Échéance", "Montant obtenu", "Terminée le", "Opérateur"],
+      "description": "Toutes les démarches regroupées par dossier client, pour l'appel trimestriel et le suivi."
+    },
+    {
+      "table": "Démarches",
+      "name": "Par opérateur",
+      "type": "grid",
+      "filter": "AND({Statut} != 'Terminée', {Statut} != 'Abandonnée')",
+      "sort": [ { "field": "Échéance", "direction": "asc" } ],
+      "group_by": "Opérateur",
+      "fields_visible": ["Titre", "Client", "Organisme", "Statut", "Statut couleur", "Échéance", "Urgence", "Prochaine étape"],
+      "description": "Charge de travail par opérateur ; sert au double contrôle du premier mois et au suivi des 40 dossiers par opérateur."
+    },
+    {
+      "table": "Démarches",
+      "name": "Rapport du mois",
+      "type": "grid",
+      "filter": "AND({À inclure au rapport}, OR({Mois de clôture} = DATETIME_FORMAT(TODAY(), 'YYYY-MM'), {Statut} != 'Terminée'))",
+      "sort": [ { "field": "Statut", "direction": "asc" }, { "field": "Échéance", "direction": "asc" } ],
+      "group_by": "Client",
+      "fields_visible": ["Titre", "Organisme", "Type", "Statut", "Terminée le", "Résultat", "Montant obtenu", "Échéance", "Prochaine étape", "Décision enfant requise"],
+      "description": "Base du rapport mensuel : démarches terminées ce mois et démarches en cours, par client. generate_report.py applique la même logique pour un mois donné."
+    }
+  ]
+}
