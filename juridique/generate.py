@@ -11,6 +11,8 @@ Conventions des sources Markdown (juridique/sources/*.md) :
                                « à faire valider par un avocat », les suivants sont des modèles
                                de lettre encadrés
     ## Article — Libellé       article numéroté automatiquement (« Article 1 — Libellé »)
+    ## Section — Libellé       section numérotée automatiquement (« 1. Libellé »), pour les
+                               documents non contractuels (fiche de poste)
     ## Autre titre             titre de section non numéroté (Parties, Annexe…)
     ### Sous-titre             sous-titre
     - élément                  liste à puces (gras inline **…** accepté)
@@ -369,10 +371,11 @@ def build_document(source: Path, output: Path) -> int:
         elif stripped.startswith("## "):
             _flush_paragraph(doc, para_buf)
             heading = stripped[3:].strip()
-            if heading.startswith("Article"):
+            if heading.startswith("Article") or heading.startswith("Section"):
                 article_no += 1
                 label = heading.split("—", 1)[1].strip() if "—" in heading else heading
-                doc.add_heading(f"Article {article_no} — {label}", level=2)
+                prefix = f"Article {article_no} — " if heading.startswith("Article") else f"{article_no}. "
+                doc.add_heading(prefix + label, level=2)
             elif heading.startswith("Annexe"):
                 doc.add_page_break()
                 doc.add_heading(heading, level=1)
@@ -421,10 +424,10 @@ def verify_document(path: Path, expected_articles: int) -> list[str]:
     """Réouvre le docx et retourne la liste des anomalies (vide si tout va bien)."""
     problems: list[str] = []
     doc = Document(path)
-    headings = [p.text for p in doc.paragraphs if p.style.name == "Heading 2" and p.text.startswith("Article ")]
+    headings = [p.text for p in doc.paragraphs if p.style.name == "Heading 2" and re.match(r"^(Article \d+ — |\d+\. )", p.text)]
     if len(headings) != expected_articles:
         problems.append(f"{path.name} : {len(headings)} articles trouvés, {expected_articles} attendus")
-    numbers = [int(h.split(" ")[1]) for h in headings]
+    numbers = [int(re.match(r"^(?:Article )?(\d+)", h).group(1)) for h in headings]
     if numbers != list(range(1, len(numbers) + 1)):
         problems.append(f"{path.name} : numérotation des articles discontinue : {numbers}")
 
