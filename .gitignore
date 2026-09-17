@@ -10,3 +10,5 @@ node_modules/
 .venv/
 ~$*.docx
 *.tmp
+outils/rapport/sorties/
+outils/airtable/.base_id
