@@ -31,7 +31,7 @@ Une valeur vide `""` signifie « non renseignée ». Toute clé peut aussi être
 
 | Clé | Exemple |
 |---|---|
-| `SITE_URL` | adresse `https://relais-parents.….workers.dev` du projet, puis le domaine propre une fois acheté |
+| `SITE_URL` | `https://relais-parents.ilansarfati-paris.workers.dev`, puis le domaine propre une fois acheté |
 | `CONTACT_EMAIL` | adresse affichée sur le site et destinataire des demandes d'appel |
 | `MANDATAIRE_RAISON_SOCIALE`, `MANDATAIRE_FORME_JURIDIQUE`, `MANDATAIRE_SIREN` | `NESS ACADEMIE`, `SAS`, `978 575 397` (déjà remplis) |
 | `MANDATAIRE_CAPITAL` | `1 000` (sans le symbole €) |

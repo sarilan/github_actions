@@ -1,7 +1,7 @@
 {
   "_aide": "Valeurs publiées sur le site (python3 site/build.py). Une valeur vide \"\" signifie « non renseignée » : le build s'arrête si elle est obligatoire, ou adapte le texte si elle est facultative. Chaque clé peut aussi être fournie par une variable d'environnement du même nom (réglage Cloudflare), qui prime sur ce fichier. Détail de chaque clé : site/README.md.",
 
-  "SITE_URL": "https://relais-parents.pages.dev",
+  "SITE_URL": "https://relais-parents.ilansarfati-paris.workers.dev",
   "CONTACT_EMAIL": "ilansarfati.paris@gmail.com",
   "TELEPHONE_AFFICHE": "",
   "TELEPHONE_LIEN": "",

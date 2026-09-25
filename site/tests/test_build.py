@@ -51,7 +51,7 @@ def test_build_complet(config_complete, tmp_path):
         contenu = page.read_text(encoding="utf-8")
         assert "{{" not in contenu, page
         assert "valider par un avocat" not in contenu, page
-    assert "Sitemap: https://relais-parents.pages.dev/sitemap.xml" in lire(sortie, "robots.txt")
+    assert "Sitemap: https://relais-parents.ilansarfati-paris.workers.dev/sitemap.xml" in lire(sortie, "robots.txt")
     assert lire(sortie, "sitemap.xml").count("<loc>") == 5
 
 
