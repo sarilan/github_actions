@@ -16,7 +16,8 @@ Tout est en français, sans identifiant ni clé dans le dépôt (`.env.example` 
 │   ├── registre-traitements-rgpd.xlsx
 │   ├── generate.py (docx depuis sources/*.md) · registre.py (xlsx)
 │   └── sources/*.md
-├── site/index.html                ← landing page autonome
+├── site/                          ← site public (voir site/README.md)
+│   ├── src/index.html · config.json · build.py · og_image.py · static/ · tests/
 ├── ads/
 │   ├── campagne-google-ads.csv · mots-cles-negatifs.csv
 │   ├── build.py (génère les CSV) · check.py (contrôle) · README.md
@@ -47,7 +48,7 @@ Python 3.11 ou plus récent.
 |---|---|---|
 | 1. Juridique | `python3 juridique/generate.py` | Régénère et vérifie les 3 docx (articles numérotés, encadré avocat, en-tête, pagination). `--check` vérifie seulement. |
 | 1. Registre RGPD | `python3 juridique/registre.py` | Régénère et vérifie `registre-traitements-rgpd.xlsx` (5 traitements, colonnes CNIL). |
-| 2. Landing page | ouvrir `site/index.html` | Remplacer les `{{VARIABLES}}` avant mise en ligne ; validation : voir « Scores ». |
+| 2. Site | `python3 site/build.py` (`--apercu` pour prévisualiser) | Site complet dans `dist/` : accueil, CGV, confidentialité, mandat, mentions légales. Valeurs dans `site/config.json`, publication sur Cloudflare Pages : `site/README.md`. |
 | 3. Google Ads | `python3 ads/build.py && python3 ads/check.py` | Régénère et contrôle les CSV d'import ; procédure d'import dans `ads/README.md`. |
 | 4. Procédures | lire `procedures/index.md` | 12 fiches Markdown. |
 | 5. Airtable | `python3 outils/airtable/create_base.py [--dry-run]` puis `python3 outils/airtable/seed.py` | Crée la base « Relais — Gestion » (idempotent) et insère 2 dossiers fictifs. Les 6 vues sont à créer à la main ou via le connecteur Airtable : le script imprime filtre, tri et regroupement de chacune. |
@@ -76,9 +77,9 @@ Les balises `{{VARIABLE}}` sont volontaires : elles correspondent aux mentions q
 | `SITE_URL` | site, ads, CGV, politique, mandat, courriels | URL du site sans barre oblique finale. |
 | `EMAIL_RECRUTEMENT` | fiche de poste | Adresse de réception des candidatures. |
 
-### Site (`site/index.html`)
+### Site (`site/config.json`)
 
-`SITE_URL`, `FORMSPREE_ENDPOINT` (URL du formulaire Formspree), `CONTACT_EMAIL`, `TELEPHONE_AFFICHE` (avec espaces insécables), `TELEPHONE_LIEN` (format `+33…`), `URL_CGV`, `URL_CONFIDENTIALITE`, `URL_MANDAT` (PDF publiés), `HEBERGEUR_NOM`, `HEBERGEUR_ADRESSE`, et les mentions `MANDATAIRE_*` ci-dessus. Le Google Tag et la conversion Google Ads restent commentés tant qu'aucun bandeau de consentement n'est en place (identifiants `AW-XXXXXXXXXX` à remplacer à ce moment-là).
+Toutes les valeurs publiées sur le site sont dans `site/config.json` ; la liste des clés obligatoires et facultatives est dans `site/README.md`. Le build refuse de publier tant qu'une valeur obligatoire manque. Les sources juridiques utilisent aussi des blocs conditionnels `{{#VARIABLE}}…{{/VARIABLE}}` et `{{^VARIABLE}}…{{/VARIABLE}}` (texte adapté selon qu'une valeur est renseignée ou non, voir `juridique/variables.py`) ; les documents Word affichent la version avec les champs à remplir. Le Google Tag et la conversion Google Ads restent commentés tant qu'aucun bandeau de consentement n'est en place (identifiants `AW-XXXXXXXXXX` à remplacer à ce moment-là).
 
 ### Google Ads (`ads/`)
 
@@ -98,8 +99,8 @@ Prénoms et coordonnées (`PRENOM_ENFANT`, `PRENOM_PARENT`, `NOM_PARENT`, `CIVIL
 2. **Assurance responsabilité civile professionnelle** : devis, souscription, report du nom de l'assureur et du numéro de police dans les documents.
 3. **Boîte postale de traitement du courrier** (service de domiciliation avec scan quotidien, hébergement UE) et mise en place des sous-adresses par client.
 4. **Numéro de téléphone français** (ligne dédiée parents et ligne 2FA) et adresse électronique dédiée aux codes de vérification.
-5. **Compte Formspree** : créer le formulaire, reporter l'URL dans `site/index.html`, activer la réponse automatique (courriel 01).
-6. **Hébergement du site**, nom de domaine (relais-admin.fr, monrelais.fr, relais-parents.fr à vérifier), publication des PDF juridiques et image Open Graph (`og-image.png`).
+5. **Compte Formspree (facultatif)** : sans lui, le formulaire du site ouvre la messagerie du visiteur avec sa demande rédigée ; avec lui, reporter `FORMSPREE_ENDPOINT` et `FORMSPREE_ENTITE` dans `site/config.json`.
+6. **Hébergement du site** sur Cloudflare Pages (procédure dans `site/README.md`) ; nom de domaine plus tard (relais-admin.fr, monrelais.fr, relais-parents.fr à vérifier) ; **médiateur de la consommation** à désigner avant la première vente.
 7. **Compte Airtable** : jeton d'accès personnel avec les portées `schema.bases:read`, `schema.bases:write`, `data.records:read`, `data.records:write`, identifiant de l'espace de travail ; exécution de `create_base.py` puis création des 6 vues (l'API ne permet pas de créer des vues) ; suppression des 2 dossiers fictifs avant la production.
 8. **Compte Google Ads** : import des CSV dans Google Ads Editor, action de conversion, réglages manuels et lancement (`ads/README.md`) ; l'activation de la mesure suppose un bandeau de consentement sur le site.
 9. **Coffre Bitwarden Teams** : création des collections, invitation des opérateurs, journal d'accès.
@@ -107,17 +108,17 @@ Prénoms et coordonnées (`PRENOM_ENFANT`, `PRENOM_PARENT`, `NOM_PARENT`, `CIVIL
 11. **Vérification annuelle des barèmes** cités dans les procédures (CSS, réversion, taxe foncière, APA, capital décès, tarifs La Poste), chaque 1er janvier et 1er avril.
 12. **Contrôle des sources officielles** : les fiches de procédure citent les pages de service-public.fr, ameli.fr, info-retraite.fr, impots.gouv.fr, ants.gouv.fr, caf.fr et pour-les-personnes-agees.gouv.fr avec une date de consultation ; depuis l'environnement de génération, ces sites n'étaient pas accessibles directement (accès réseau restreint) et les contenus ont été vérifiés par recherche documentaire. Une relecture de chaque fiche face à la page officielle est à faire avant la formation des opérateurs.
 
-## Scores et résultats des tests (16 septembre 2026)
+## Scores et résultats des tests (16 et 25 septembre 2026)
 
 | Contrôle | Résultat |
 |---|---|
 | `juridique/generate.py` | 3 docx conformes : 14, 18 et 12 articles, encadré, en-tête, pagination |
 | `juridique/registre.py` | xlsx conforme : 5 traitements, 20 colonnes |
-| `site/index.html` — Nu HTML Checker (vnu 24) | 0 erreur (variables substituées par des valeurs d'exemple) |
-| `site/index.html` — html-validate | 0 erreur |
-| `site/index.html` — Lighthouse 12, mobile | Performance 99, Accessibilité 100, Bonnes pratiques 96, SEO 100 |
-| `site/index.html` — Lighthouse 12, ordinateur | Performance 100, Accessibilité 100, Bonnes pratiques 96, SEO 100 |
-| `site/index.html` — largeur | Aucun débordement horizontal à 320 px et 390 px ; poids 47 Ko |
+| Site (`dist/`, 6 pages) — Nu HTML Checker (vnu) et html-validate | 0 erreur (build avec des valeurs d'exemple), 25 septembre 2026 |
+| Site — Lighthouse 12, mobile (accueil, CGV, mandat) | Performance 97 à 99, Accessibilité 100, Bonnes pratiques 96, SEO 100 |
+| Site — Lighthouse 12, ordinateur (accueil, CGV, mandat) | Performance 100, Accessibilité 100, Bonnes pratiques 96, SEO 100 |
+| Site — largeur | Aucun débordement horizontal à 320 px et 390 px sur les 6 pages |
+| `site/tests` | 27 tests, tous passés |
 | `ads/check.py` | Conforme : 1 campagne, 4 groupes, 96 lignes de mots-clés, 60 titres, 16 descriptions, 4 liens annexes, 4 accroches, 1 extrait structuré, 1 extension d'appel, 94 négatifs |
 | `outils/airtable/tests` | 23 tests, tous passés |
 | `outils/courrier/tests` | 95 tests, tous passés ; couverture de `classify.py` : 98 % |

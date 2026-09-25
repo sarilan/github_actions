@@ -12,3 +12,5 @@ node_modules/
 *.tmp
 outils/rapport/sorties/
 outils/airtable/.base_id
+dist/
+dist-apercu/

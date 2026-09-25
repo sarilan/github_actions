@@ -64,7 +64,9 @@ Relais fait appel aux sous-traitants suivants, liés par un contrat conforme à 
 | {{TELEPHONIE_NOM}} | Ligne téléphonique dédiée et réception des codes de vérification | {{TELEPHONIE_HEBERGEMENT}} |
 | {{MESSAGERIE_NOM}} | Messagerie électronique et envoi des rapports | {{MESSAGERIE_HEBERGEMENT}} |
 | {{PAIEMENT_NOM}} | Encaissement des abonnements et forfaits | {{PAIEMENT_HEBERGEMENT}} |
-| Formspree ({{FORMSPREE_ENTITE}}) | Réception des messages du formulaire de contact | {{FORMSPREE_HEBERGEMENT}} |
+| {{HEBERGEUR_NOM}} | Hébergement et diffusion du site internet | {{HEBERGEUR_LOCALISATION}} |
+{{#FORMSPREE_ENTITE}}| Formspree ({{FORMSPREE_ENTITE}}) | Réception des messages du formulaire de contact | {{FORMSPREE_HEBERGEMENT}} |
+{{/FORMSPREE_ENTITE}}
 
 Relais privilégie un hébergement dans l'Union européenne. Lorsque ce n'est pas le cas, les garanties de l'article « Transferts hors Union européenne » s'appliquent. La liste à jour des sous-traitants est communiquée sur simple demande.
 

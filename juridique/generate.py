@@ -37,6 +37,10 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+
+from organismes import ORGANISMES_CHECKLIST  # noqa: E402
+from variables import render  # noqa: E402
 SOURCES = HERE / "sources"
 
 # Nom du fichier de sortie -> (source Markdown, nombre d'articles numérotés attendu)
@@ -48,32 +52,6 @@ DOCUMENTS = {
 
 AVERTISSEMENT = "Document à faire valider par un avocat avant utilisation."
 
-ORGANISMES_CHECKLIST = [
-    "FranceConnect (identité numérique)",
-    "Ameli — Assurance Maladie",
-    "L'Assurance retraite (CNAV) / info-retraite.fr",
-    "Agirc-Arrco (retraite complémentaire)",
-    "MSA (régime agricole) ou autre régime de retraite",
-    "impots.gouv.fr — Direction générale des Finances publiques",
-    "ANTS — titres d'identité, certificat d'immatriculation, permis",
-    "CAF — Caisse d'allocations familiales",
-    "Conseil départemental — APA, aides à l'autonomie",
-    "Mairie / CCAS",
-    "Complémentaire santé (mutuelle) : ……………………………",
-    "Assurance habitation : ……………………………",
-    "Assurance automobile : ……………………………",
-    "Fournisseur d'électricité : ……………………………",
-    "Fournisseur de gaz : ……………………………",
-    "Service des eaux : ……………………………",
-    "Opérateur téléphonique : ……………………………",
-    "Fournisseur d'accès internet : ……………………………",
-    "Syndic de copropriété : ……………………………",
-    "Banque (consultation uniquement) : ……………………………",
-    "Seconde banque (consultation uniquement) : ……………………………",
-    "La Poste — réexpédition du courrier",
-    "Autre : ……………………………",
-    "Autre : ……………………………",
-]
 
 _BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
 
@@ -336,7 +314,8 @@ def _flush_paragraph(doc: Document, buf: list[str]) -> None:
 
 def build_document(source: Path, output: Path) -> int:
     """Construit le docx et retourne le nombre d'articles numérotés produits."""
-    lines = source.read_text(encoding="utf-8").splitlines()
+    # Mode modèle : blocs conditionnels résolus, {{VARIABLES}} laissées visibles.
+    lines = render(source.read_text(encoding="utf-8")).splitlines()
     doc = Document()
     _configure_styles(doc)
 

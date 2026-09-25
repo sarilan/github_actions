@@ -1,0 +1,52 @@
+{
+  "_aide": "Valeurs publiées sur le site (python3 site/build.py). Une valeur vide \"\" signifie « non renseignée » : le build s'arrête si elle est obligatoire, ou adapte le texte si elle est facultative. Chaque clé peut aussi être fournie par une variable d'environnement du même nom (réglage Cloudflare), qui prime sur ce fichier. Détail de chaque clé : site/README.md.",
+
+  "SITE_URL": "https://relais-parents.pages.dev",
+  "CONTACT_EMAIL": "",
+  "TELEPHONE_AFFICHE": "",
+  "TELEPHONE_LIEN": "",
+  "FORMSPREE_ENDPOINT": "",
+
+  "MANDATAIRE_RAISON_SOCIALE": "NESS ACADEMIE",
+  "MANDATAIRE_FORME_JURIDIQUE": "SAS",
+  "MANDATAIRE_CAPITAL": "",
+  "MANDATAIRE_VILLE_RCS": "",
+  "MANDATAIRE_SIREN": "978 575 397",
+  "MANDATAIRE_TVA": "",
+  "MANDATAIRE_ADRESSE": "",
+  "MANDATAIRE_REPRESENTANT": "",
+  "MANDATAIRE_QUALITE_REPRESENTANT": "Président",
+  "MANDATAIRE_EMAIL": "",
+  "MANDATAIRE_TELEPHONE": "",
+
+  "DPO_EMAIL": "",
+  "DATE_CGV": "25 septembre 2026",
+  "DATE_POLITIQUE": "25 septembre 2026",
+
+  "ASSUREUR_RC_PRO": "",
+  "NUMERO_POLICE_RC_PRO": "",
+  "MEDIATEUR_NOM": "",
+  "MEDIATEUR_ADRESSE": "",
+  "MEDIATEUR_SITE": "",
+  "LIGNE_2FA_RELAIS": "",
+  "EMAIL_2FA_RELAIS": "",
+
+  "HEBERGEUR_NOM": "Cloudflare, Inc.",
+  "HEBERGEUR_ADRESSE": "101 Townsend Street, San Francisco, CA 94107, États-Unis — téléphone : +1 650 319 8930",
+  "HEBERGEUR_LOCALISATION": "Réseau mondial de Cloudflare (Union européenne et États-Unis) ; clauses contractuelles types",
+
+  "AIRTABLE_ENTITE": "Formagrid Inc.",
+  "AIRTABLE_HEBERGEMENT": "États-Unis ; clauses contractuelles types",
+  "BITWARDEN_ENTITE": "Bitwarden, Inc.",
+  "BITWARDEN_HEBERGEMENT": "Union européenne (région européenne de Bitwarden)",
+  "SERVICE_SCAN_NOM": "Service de domiciliation et de numérisation (prestataire en cours de sélection)",
+  "SERVICE_SCAN_HEBERGEMENT": "Union européenne (condition de sélection)",
+  "TELEPHONIE_NOM": "Opérateur de téléphonie (prestataire en cours de sélection)",
+  "TELEPHONIE_HEBERGEMENT": "Union européenne (condition de sélection)",
+  "MESSAGERIE_NOM": "Service de messagerie électronique (prestataire en cours de sélection)",
+  "MESSAGERIE_HEBERGEMENT": "Union européenne (condition de sélection)",
+  "PAIEMENT_NOM": "Stripe Payments Europe, Ltd.",
+  "PAIEMENT_HEBERGEMENT": "Union européenne et États-Unis ; clauses contractuelles types",
+  "FORMSPREE_ENTITE": "",
+  "FORMSPREE_HEBERGEMENT": "États-Unis ; clauses contractuelles types"
+}

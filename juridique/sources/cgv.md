@@ -6,9 +6,9 @@ Version en vigueur au {{DATE_CGV}}.
 
 ## Article — Identification du prestataire
 
-Le service « Relais » est exploité par {{MANDATAIRE_RAISON_SOCIALE}}, {{MANDATAIRE_FORME_JURIDIQUE}} au capital de {{MANDATAIRE_CAPITAL}} €, immatriculée au RCS de {{MANDATAIRE_VILLE_RCS}} sous le numéro {{MANDATAIRE_SIREN}}, numéro de TVA intracommunautaire {{MANDATAIRE_TVA}}, dont le siège social est situé {{MANDATAIRE_ADRESSE}} (ci-après « Relais » ou « le Prestataire »).
+Le service « Relais » est exploité par {{MANDATAIRE_RAISON_SOCIALE}}, {{MANDATAIRE_FORME_JURIDIQUE}} au capital de {{MANDATAIRE_CAPITAL}} €, immatriculée au RCS de {{MANDATAIRE_VILLE_RCS}} sous le numéro {{MANDATAIRE_SIREN}}{{#MANDATAIRE_TVA}}, numéro de TVA intracommunautaire {{MANDATAIRE_TVA}}{{/MANDATAIRE_TVA}}, dont le siège social est situé {{MANDATAIRE_ADRESSE}} (ci-après « Relais » ou « le Prestataire »).
 
-Courriel : {{MANDATAIRE_EMAIL}} — Téléphone : {{MANDATAIRE_TELEPHONE}} — Site : {{SITE_URL}}
+Courriel : {{MANDATAIRE_EMAIL}}{{#MANDATAIRE_TELEPHONE}} — Téléphone : {{MANDATAIRE_TELEPHONE}}{{/MANDATAIRE_TELEPHONE}} — Site : {{SITE_URL}}
 
 ## Article — Définitions
 
@@ -122,7 +122,7 @@ Le Prestataire peut résilier l'abonnement moyennant un préavis d'un (1) mois p
 
 Le Prestataire est tenu d'une obligation de moyens. Sa responsabilité ne peut être engagée en cas de retard ou de refus imputable à un organisme tiers, d'informations inexactes ou incomplètes fournies par le Client ou le Bénéficiaire, de force majeure, ou d'indisponibilité des services en ligne des organismes.
 
-Le Prestataire est assuré au titre de sa responsabilité civile professionnelle auprès de {{ASSUREUR_RC_PRO}}, police n° {{NUMERO_POLICE_RC_PRO}}, couvrant les conséquences pécuniaires des dommages causés dans l'exécution du service. Une attestation d'assurance est remise sur demande.
+{{#ASSUREUR_RC_PRO}}Le Prestataire est assuré au titre de sa responsabilité civile professionnelle auprès de {{ASSUREUR_RC_PRO}}, police n° {{NUMERO_POLICE_RC_PRO}}, couvrant les conséquences pécuniaires des dommages causés dans l'exécution du service. Une attestation d'assurance est remise sur demande.{{/ASSUREUR_RC_PRO}}{{^ASSUREUR_RC_PRO}}Le Prestataire souscrit, préalablement à l'exécution de toute prestation, une assurance de responsabilité civile professionnelle couvrant les conséquences pécuniaires des dommages causés dans l'exécution du service. L'attestation d'assurance, mentionnant l'assureur et le numéro de police, est remise au Client avant la signature du Mandat.{{/ASSUREUR_RC_PRO}}
 
 Sans préjudice des dispositions légales impératives, la responsabilité du Prestataire au titre d'un abonnement est limitée au montant des sommes versées par le Client au cours des douze (12) mois précédant le fait générateur, et, au titre d'un forfait ou d'une démarche isolée, au prix de la prestation.
 
@@ -138,7 +138,7 @@ Si le Client demande expressément que l'exécution du service commence avant la
 
 ## Article — Médiation de la consommation
 
-Conformément aux articles L. 611-1 et suivants et R. 612-1 et suivants du Code de la consommation, en cas de litige non résolu par une réclamation écrite préalable adressée au Prestataire, le Client peut recourir gratuitement au médiateur de la consommation suivant : {{MEDIATEUR_NOM}}, {{MEDIATEUR_ADRESSE}}, {{MEDIATEUR_SITE}}. La demande de médiation doit être introduite dans un délai d'un an à compter de la réclamation écrite adressée au Prestataire.
+Conformément aux articles L. 611-1 et suivants et R. 612-1 et suivants du Code de la consommation, en cas de litige non résolu par une réclamation écrite préalable adressée au Prestataire, le Client peut recourir gratuitement {{#MEDIATEUR_NOM}}au médiateur de la consommation suivant : {{MEDIATEUR_NOM}}, {{MEDIATEUR_ADRESSE}}, {{MEDIATEUR_SITE}}.{{/MEDIATEUR_NOM}}{{^MEDIATEUR_NOM}}à un médiateur de la consommation. Les coordonnées du médiateur auquel le Prestataire adhère sont communiquées au Client avant la conclusion du contrat et sur simple demande à {{MANDATAIRE_EMAIL}}.{{/MEDIATEUR_NOM}} La demande de médiation doit être introduite dans un délai d'un an à compter de la réclamation écrite adressée au Prestataire.
 
 Le Client résidant dans l'Union européenne peut également utiliser la plateforme européenne de règlement en ligne des litiges.
 

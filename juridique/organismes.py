@@ -1,0 +1,28 @@
+"""Liste des organismes proposés à cocher en annexe 1 du mandat (docx et site)."""
+
+ORGANISMES_CHECKLIST = [
+    "FranceConnect (identité numérique)",
+    "Ameli — Assurance Maladie",
+    "L'Assurance retraite (CNAV) / info-retraite.fr",
+    "Agirc-Arrco (retraite complémentaire)",
+    "MSA (régime agricole) ou autre régime de retraite",
+    "impots.gouv.fr — Direction générale des Finances publiques",
+    "ANTS — titres d'identité, certificat d'immatriculation, permis",
+    "CAF — Caisse d'allocations familiales",
+    "Conseil départemental — APA, aides à l'autonomie",
+    "Mairie / CCAS",
+    "Complémentaire santé (mutuelle) : ……………………………",
+    "Assurance habitation : ……………………………",
+    "Assurance automobile : ……………………………",
+    "Fournisseur d'électricité : ……………………………",
+    "Fournisseur de gaz : ……………………………",
+    "Service des eaux : ……………………………",
+    "Opérateur téléphonique : ……………………………",
+    "Fournisseur d'accès internet : ……………………………",
+    "Syndic de copropriété : ……………………………",
+    "Banque (consultation uniquement) : ……………………………",
+    "Seconde banque (consultation uniquement) : ……………………………",
+    "La Poste — réexpédition du courrier",
+    "Autre : ……………………………",
+    "Autre : ……………………………",
+]

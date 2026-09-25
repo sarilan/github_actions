@@ -7,6 +7,10 @@ echo "== Juridique =="
 python3 juridique/generate.py --check
 python3 juridique/registre.py
 
+echo "== Site =="
+python3 -m pytest site/tests -q
+python3 site/build.py --apercu --sortie "$(mktemp -d)/apercu" >/dev/null && echo "✔ aperçu du site construit"
+
 echo "== Google Ads =="
 python3 ads/check.py
 

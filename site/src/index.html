@@ -39,8 +39,8 @@
         "name": "Relais",
         "url": "{{SITE_URL}}/",
         "email": "{{CONTACT_EMAIL}}",
-        "telephone": "{{TELEPHONE_AFFICHE}}",
-        "description": "Mandataire administratif à distance pour les parents restés en France, au service de leurs enfants expatriés.",
+{{#TELEPHONE_AFFICHE}}        "telephone": "{{TELEPHONE_LIEN}}",
+{{/TELEPHONE_AFFICHE}}        "description": "Mandataire administratif à distance pour les parents restés en France, au service de leurs enfants expatriés.",
         "areaServed": "FR",
         "availableLanguage": "fr"
       },
@@ -518,9 +518,9 @@
       <div class="conteneur">
         <p class="surtitre">Premier contact</p>
         <h2 id="titre-contact">Réservez un appel de 20 minutes</h2>
-        <p class="intro">Cinq questions, une minute. Nous vous rappelons sous 24 h ouvrées au créneau que vous indiquez. Sans engagement.</p>
+        <p class="intro">Six questions, une minute. Nous vous rappelons sous 24 h ouvrées au créneau que vous indiquez. Sans engagement.</p>
 
-        <form class="formulaire" id="formulaire-contact" action="{{FORMSPREE_ENDPOINT}}" method="POST" novalidate>
+        <form class="formulaire" id="formulaire-contact" action="{{#FORMSPREE_ENDPOINT}}{{FORMSPREE_ENDPOINT}}{{/FORMSPREE_ENDPOINT}}{{^FORMSPREE_ENDPOINT}}mailto:{{CONTACT_EMAIL}}{{/FORMSPREE_ENDPOINT}}" method="POST" data-envoi="{{#FORMSPREE_ENDPOINT}}formulaire{{/FORMSPREE_ENDPOINT}}{{^FORMSPREE_ENDPOINT}}courriel{{/FORMSPREE_ENDPOINT}}" data-destinataire="{{CONTACT_EMAIL}}" novalidate>
           <div class="rangee">
             <div class="champ">
               <label for="pays">1. Dans quel pays vivez-vous ?</label>
@@ -565,7 +565,7 @@
             <p class="erreur" id="erreur-demarche" aria-live="polite"></p>
           </div>
           <div class="champ">
-            <label for="creneau">5. Le meilleur créneau pour un appel de 20 minutes</label>
+            <label for="creneau">6. Le meilleur créneau pour un appel de 20 minutes</label>
             <p class="aide" id="aide-creneau">Indiquez le jour, l'heure et votre fuseau horaire, par exemple « mardi ou jeudi, 19 h à 21 h, heure d'Israël ».</p>
             <input type="text" id="creneau" name="creneau" required aria-describedby="aide-creneau erreur-creneau" maxlength="160">
             <p class="erreur" id="erreur-creneau" aria-live="polite"></p>
@@ -576,11 +576,14 @@
           </div>
           <input type="hidden" name="_subject" value="Nouvelle demande d'appel — Relais">
           <input type="hidden" name="_language" value="fr">
-          <p class="rgpd">En envoyant ce formulaire, vous acceptez que Relais utilise ces informations pour vous rappeler et organiser l'appel. Elles sont conservées trois ans au plus si vous ne souscrivez pas. Voir la <a href="#confidentialite">politique de confidentialité</a>.</p>
+          <p class="rgpd">En envoyant ce formulaire, vous acceptez que Relais utilise ces informations pour vous rappeler et organiser l'appel. Elles sont conservées trois ans au plus si vous ne souscrivez pas. Voir la <a href="/confidentialite/">politique de confidentialité</a>.</p>
           <p class="erreur" id="erreur-formulaire" aria-live="assertive"></p>
           <button class="bouton" type="submit" id="bouton-envoyer">Demander à être rappelé</button>
           <div class="message-etat succes" id="message-succes" hidden role="status">
-            <strong>Merci, votre demande est bien reçue.</strong> Nous vous rappelons sous 24 h ouvrées au créneau indiqué. Un accusé de réception vient de vous être envoyé par courriel.
+            <strong>Merci, votre demande est bien reçue.</strong> Nous vous rappelons sous 24 h ouvrées au créneau indiqué.
+          </div>
+          <div class="message-etat succes" id="message-courriel" hidden role="status">
+            <strong>Votre messagerie s'est ouverte avec votre demande déjà rédigée.</strong> Il ne vous reste qu'à l'envoyer. Si rien ne s'est ouvert, écrivez-nous à <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a> en reprenant vos réponses.
           </div>
           <div class="message-etat echec" id="message-echec" hidden role="alert">
             <strong>L'envoi n'a pas abouti.</strong> Vérifiez votre connexion et réessayez, ou écrivez-nous directement à <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a>.
@@ -601,22 +604,23 @@
         <div>
           <h2>Documents</h2>
           <ul>
-            <li><a href="{{URL_CGV}}" id="cgv">Conditions générales de vente</a></li>
-            <li><a href="{{URL_CONFIDENTIALITE}}" id="confidentialite">Politique de confidentialité</a></li>
-            <li><a href="{{URL_MANDAT}}">Modèle de mandat</a></li>
+            <li><a href="/cgv/">Conditions générales de vente</a></li>
+            <li><a href="/confidentialite/">Politique de confidentialité</a></li>
+            <li><a href="/mandat/">Modèle de mandat</a></li>
+            <li><a href="/mentions-legales/">Mentions légales</a></li>
           </ul>
         </div>
         <div>
           <h2>Contact</h2>
           <ul>
             <li><a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></li>
-            <li><a href="tel:{{TELEPHONE_LIEN}}">{{TELEPHONE_AFFICHE}}</a></li>
-            <li><a href="#contact">Réserver un appel</a></li>
+{{#TELEPHONE_AFFICHE}}            <li><a href="tel:{{TELEPHONE_LIEN}}">{{TELEPHONE_AFFICHE}}</a></li>
+{{/TELEPHONE_AFFICHE}}            <li><a href="#contact">Réserver un appel</a></li>
           </ul>
         </div>
       </div>
       <div class="mentions" id="mentions-legales">
-        <p><strong>Mentions légales.</strong> Site édité par {{MANDATAIRE_RAISON_SOCIALE}}, {{MANDATAIRE_FORME_JURIDIQUE}} au capital de {{MANDATAIRE_CAPITAL}} €, RCS {{MANDATAIRE_VILLE_RCS}} {{MANDATAIRE_SIREN}}, siège social : {{MANDATAIRE_ADRESSE}}. Directeur de la publication : {{MANDATAIRE_REPRESENTANT}}. Hébergeur : {{HEBERGEUR_NOM}}, {{HEBERGEUR_ADRESSE}}. Ce site ne dépose aucun cookie et n'utilise aucun outil de mesure d'audience.</p>
+        <p>Service exploité par {{MANDATAIRE_RAISON_SOCIALE}}, {{MANDATAIRE_FORME_JURIDIQUE}}, RCS {{MANDATAIRE_VILLE_RCS}} {{MANDATAIRE_SIREN}}. Voir les <a href="/mentions-legales/">mentions légales</a>. Ce site ne dépose aucun cookie et n'utilise aucun outil de mesure d'audience.</p>
         <p>© <span id="annee">2026</span> Relais. Tous droits réservés.</p>
       </div>
     </div>
@@ -630,6 +634,7 @@
       var form = document.getElementById('formulaire-contact');
       var bouton = document.getElementById('bouton-envoyer');
       var succes = document.getElementById('message-succes');
+      var succesCourriel = document.getElementById('message-courriel');
       var echec = document.getElementById('message-echec');
       var erreurGlobale = document.getElementById('erreur-formulaire');
 
@@ -667,9 +672,31 @@
         });
       });
 
+      // Envoi sans prestataire de formulaire : ouvre la messagerie du visiteur
+      // avec la demande déjà rédigée, adressée à Relais.
+      function lienCourriel() {
+        var pays = document.getElementById('pays').value;
+        var lignes = [
+          'Bonjour,',
+          '',
+          'Je souhaite réserver un appel de 20 minutes.',
+          '',
+          'Pays de résidence : ' + pays,
+          'Ville du parent en France : ' + document.getElementById('ville').value.trim(),
+          'Âge du parent : ' + document.getElementById('age').value.trim(),
+          'Démarche qui pose problème : ' + document.getElementById('demarche').value.trim(),
+          'Mon courriel : ' + document.getElementById('email').value.trim(),
+          'Créneau souhaité : ' + document.getElementById('creneau').value.trim()
+        ];
+        return 'mailto:' + form.getAttribute('data-destinataire') +
+          '?subject=' + encodeURIComponent('Demande d\'appel — Relais (' + pays + ')') +
+          '&body=' + encodeURIComponent(lignes.join('\n'));
+      }
+
       form.addEventListener('submit', function (evt) {
         evt.preventDefault();
         succes.hidden = true;
+        succesCourriel.hidden = true;
         echec.hidden = true;
         erreurGlobale.textContent = '';
         var invalide = valider();
@@ -678,12 +705,13 @@
           invalide.focus();
           return;
         }
-        var action = form.getAttribute('action');
-        if (!action || action.indexOf('{{') === 0) {
-          echec.hidden = false;
-          echec.focus && echec.focus();
+        if (form.getAttribute('data-envoi') === 'courriel') {
+          window.location.href = lienCourriel();
+          succesCourriel.hidden = false;
+          succesCourriel.scrollIntoView({ behavior: 'smooth', block: 'center' });
           return;
         }
+        var action = form.getAttribute('action');
         bouton.disabled = true;
         bouton.textContent = 'Envoi en cours…';
         var donnees = new FormData(form);

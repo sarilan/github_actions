@@ -22,7 +22,7 @@ Ci-après « le Mandant ».
 
 {{MANDATAIRE_RAISON_SOCIALE}}, {{MANDATAIRE_FORME_JURIDIQUE}} au capital de {{MANDATAIRE_CAPITAL}} €, immatriculée au RCS de {{MANDATAIRE_VILLE_RCS}} sous le numéro {{MANDATAIRE_SIREN}}, dont le siège social est situé {{MANDATAIRE_ADRESSE}}, représentée par {{MANDATAIRE_REPRESENTANT}} en qualité de {{MANDATAIRE_QUALITE_REPRESENTANT}}, exploitant le service « Relais ».
 
-Courriel : {{MANDATAIRE_EMAIL}} — Téléphone : {{MANDATAIRE_TELEPHONE}}
+Courriel : {{MANDATAIRE_EMAIL}}{{#MANDATAIRE_TELEPHONE}} — Téléphone : {{MANDATAIRE_TELEPHONE}}{{/MANDATAIRE_TELEPHONE}}
 
 Ci-après « le Mandataire » ou « Relais ».
 
@@ -81,7 +81,7 @@ La Personne de confiance n'est pas partie au mandat et ne dispose d'aucun pouvoi
 
 ## Article — Authentification à deux facteurs
 
-Le Mandant reconnaît que l'accès à certains services en ligne nécessite la réception de codes de vérification (SMS, appel vocal, courriel). Le Mandant autorise expressément le Mandataire à déclarer, auprès des organismes concernés, la ligne téléphonique dédiée du service Relais, numéro {{LIGNE_2FA_RELAIS}}, et l'adresse électronique dédiée {{EMAIL_2FA_RELAIS}} comme moyen de réception de ces codes, pendant toute la durée du mandat.
+Le Mandant reconnaît que l'accès à certains services en ligne nécessite la réception de codes de vérification (SMS, appel vocal, courriel). Le Mandant autorise expressément le Mandataire à déclarer, auprès des organismes concernés, la ligne téléphonique dédiée du service Relais{{#LIGNE_2FA_RELAIS}}, numéro {{LIGNE_2FA_RELAIS}},{{/LIGNE_2FA_RELAIS}}{{^LIGNE_2FA_RELAIS}}, dont le numéro est indiqué au Mandant lors de la signature,{{/LIGNE_2FA_RELAIS}} et l'adresse électronique dédiée{{#EMAIL_2FA_RELAIS}} {{EMAIL_2FA_RELAIS}}{{/EMAIL_2FA_RELAIS}}{{^EMAIL_2FA_RELAIS}} indiquée au Mandant lors de la signature{{/EMAIL_2FA_RELAIS}} comme moyen de réception de ces codes, pendant toute la durée du mandat.
 
 Le Mandataire s'engage à restituer la maîtrise de ces moyens d'authentification au Mandant à la fin du mandat, en rétablissant les coordonnées personnelles du Mandant auprès de chaque organisme.
 
@@ -95,7 +95,7 @@ Le Mandataire s'engage à :
 - conserver les identifiants dans un coffre-fort numérique chiffré, avec accès nominatifs et journal d'accès, et ne jamais les transmettre par courriel ou messagerie ;
 - rendre compte de sa gestion par un rapport mensuel adressé au Mandant et à la Personne de confiance, et répondre à toute demande d'information ;
 - restituer au Mandant, à la fin du mandat, l'ensemble des identifiants, documents et accès, et supprimer ses propres accès ;
-- être couvert par une assurance de responsabilité civile professionnelle souscrite auprès de {{ASSUREUR_RC_PRO}} sous le numéro de police {{NUMERO_POLICE_RC_PRO}}.
+- être couvert par une assurance de responsabilité civile professionnelle{{#ASSUREUR_RC_PRO}} souscrite auprès de {{ASSUREUR_RC_PRO}} sous le numéro de police {{NUMERO_POLICE_RC_PRO}}{{/ASSUREUR_RC_PRO}}{{^ASSUREUR_RC_PRO}}, dont l'attestation est remise au Mandant et à la Personne de confiance avant la signature{{/ASSUREUR_RC_PRO}}.
 
 ## Article — Obligations du mandant
 

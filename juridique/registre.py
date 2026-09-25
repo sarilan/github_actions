@@ -132,7 +132,7 @@ TRAITEMENTS = [
         "Source des données": "Prospect (formulaire, courriel, appel) ; parrain.",
         "Destinataires internes": "Direction ; personne en charge des appels.",
         "Destinataires externes": "Aucun.",
-        "Sous-traitants": "Formspree (réception du formulaire) ; service de messagerie ; outil de visioconférence.",
+        "Sous-traitants": "Hébergeur du site ; Formspree (réception du formulaire, si activé) ; service de messagerie ; outil de visioconférence.",
         "Transferts hors UE": "Formspree : États-Unis, encadré par clauses contractuelles types ; envoi des courriels au prospect dans son pays de résidence.",
         "Durée de conservation (base active)": "Jusqu'à la souscription ou 3 ans après le dernier contact.",
         "Durée d'archivage intermédiaire": "Aucun ; suppression à l'issue de la durée.",
@@ -149,6 +149,7 @@ SOUS_TRAITANTS = [
     ("Téléphonie", "Ligne dédiée, codes de vérification", "{{TELEPHONIE_NOM}}", "{{TELEPHONIE_HEBERGEMENT}}", "Contrat art. 28"),
     ("Messagerie", "Courriels, rapports", "{{MESSAGERIE_NOM}}", "{{MESSAGERIE_HEBERGEMENT}}", "Contrat art. 28"),
     ("Paiement", "Encaissement", "{{PAIEMENT_NOM}}", "{{PAIEMENT_HEBERGEMENT}}", "Contrat art. 28 ; PCI-DSS"),
+    ("Hébergeur du site", "Hébergement et diffusion du site internet", "{{HEBERGEUR_NOM}}", "{{HEBERGEUR_LOCALISATION}}", "Conditions du fournisseur (art. 28) ; clauses contractuelles types ; aucune donnée de dossier"),
     ("Formspree", "Formulaire de contact", "{{FORMSPREE_ENTITE}}", "{{FORMSPREE_HEBERGEMENT}}", "Clauses contractuelles types (États-Unis)"),
 ]
 
