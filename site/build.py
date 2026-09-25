@@ -43,6 +43,8 @@ from variables import VariablesManquantes, render  # noqa: E402
 SOURCES_JURIDIQUES = RACINE / "juridique" / "sources"
 AVERTISSEMENT = "Document à faire valider par un avocat avant utilisation."
 ADRESSES_TECHNIQUES = (".pages.dev", ".workers.dev")
+STRIPE_LIENS_FORFAITS = ("STRIPE_LIEN_DIAGNOSTIC", "STRIPE_LIEN_HOSPITALISATION", "STRIPE_LIEN_EHPAD",
+                         "STRIPE_LIEN_SUCCESSION", "STRIPE_LIEN_DEMARCHE")
 
 # (chemin publié, source Markdown, titre court pour la navigation)
 DOCUMENTS = [
@@ -92,6 +94,17 @@ def controler_config(v: dict[str, str]) -> list[str]:
         if not v.get("FORMSPREE_ENTITE"):
             erreurs.append("FORMSPREE_ENTITE est obligatoire dès que FORMSPREE_ENDPOINT est renseigné "
                            "(sous-traitant cité dans la politique de confidentialité)")
+    for cle in STRIPE_LIENS_FORFAITS + ("STRIPE_LIEN_ABONNEMENT", "STRIPE_LIEN_FONDATEUR"):
+        if v.get(cle) and not re.fullmatch(r"https://buy\.stripe\.com/[A-Za-z0-9_]+", v[cle]):
+            erreurs.append(f"{cle} doit être un lien de paiement Stripe, ex. https://buy.stripe.com/xxxxxxxx")
+    renseignes = [cle for cle in STRIPE_LIENS_FORFAITS if v.get(cle)]
+    if renseignes and len(renseignes) != len(STRIPE_LIENS_FORFAITS):
+        manquants = ", ".join(c for c in STRIPE_LIENS_FORFAITS if not v.get(c))
+        erreurs.append(f"les liens des forfaits vont ensemble : renseigner aussi {manquants}")
+    if v.get("STRIPE_LIEN_FONDATEUR") and not v.get("STRIPE_LIEN_ABONNEMENT"):
+        erreurs.append("STRIPE_LIEN_FONDATEUR suppose STRIPE_LIEN_ABONNEMENT (tarif normal après les 10 premiers)")
+    if v.get("STRIPE_PORTAIL_CLIENT") and not re.fullmatch(r"https://billing\.stripe\.com/p/login/[A-Za-z0-9_]+", v["STRIPE_PORTAIL_CLIENT"]):
+        erreurs.append("STRIPE_PORTAIL_CLIENT doit être de la forme https://billing.stripe.com/p/login/xxxxxxxx")
     if bool(v.get("ASSUREUR_RC_PRO")) != bool(v.get("NUMERO_POLICE_RC_PRO")):
         erreurs.append("ASSUREUR_RC_PRO et NUMERO_POLICE_RC_PRO vont ensemble")
     mediateur = [v.get(k) for k in ("MEDIATEUR_NOM", "MEDIATEUR_ADRESSE", "MEDIATEUR_SITE")]
@@ -416,6 +429,23 @@ def page_mentions(v: dict[str, str], apercu: bool) -> str:
                 description="Éditeur, directeur de la publication et hébergeur du site Relais.", contenu=contenu, apercu=apercu)
 
 
+def page_merci(v: dict[str, str], apercu: bool) -> str:
+    """Page de retour après un paiement Stripe (à indiquer comme redirection dans chaque lien de paiement)."""
+    contact = html.escape(v.get("CONTACT_EMAIL", ""))
+    contenu = f"""      <h1>Merci, votre paiement est confirmé</h1>
+      <p class="chapeau">Stripe vous a envoyé un reçu par courriel.</p>
+      <h2>La suite</h2>
+      <ol>
+        <li>Nous vous appelons sous 24 h ouvrées pour faire le point sur la situation de votre parent.</li>
+        <li>Nous appelons ensuite votre parent pour lui présenter le service, puis vous envoyons à tous deux le mandat à signer.</li>
+        <li>Dès la signature, nous commençons le diagnostic et le traitement des démarches.</li>
+      </ol>
+      <p>Une question d'ici là : <a href="mailto:{contact}">{contact}</a>.</p>
+      <p><a href="/">Revenir à l'accueil</a></p>"""
+    return page(v, chemin="/merci/", titre="Paiement confirmé", description="Confirmation de paiement et prochaines étapes.",
+                contenu=contenu, apercu=apercu, indexable=False)
+
+
 def page_404(v: dict[str, str], apercu: bool) -> str:
     contenu = """      <h1>Page introuvable</h1>
       <p class="chapeau">Cette adresse ne correspond à aucune page du site.</p>
@@ -530,7 +560,7 @@ def verifier_sortie(sortie: Path, apercu: bool) -> list[str]:
             elif fragment and fragment not in ids_par_page.get(cible, set()):
                 problemes.append(f"{p.relative_to(sortie)} : ancre introuvable {lien}")
     for requis in ("index.html", "cgv/index.html", "confidentialite/index.html", "mandat/index.html",
-                   "mentions-legales/index.html", "404.html", "robots.txt", "sitemap.xml", "_headers", "og-image.png"):
+                   "mentions-legales/index.html", "merci/index.html", "404.html", "robots.txt", "sitemap.xml", "_headers", "og-image.png"):
         if not (sortie / requis).exists():
             problemes.append(f"fichier attendu absent : {requis}")
     return problemes
@@ -551,6 +581,7 @@ def construire(config: Path, sortie: Path, apercu: bool = False) -> dict[str, se
     for slug, source, nom in DOCUMENTS:
         fichiers[f"{slug}/index.html"] = page_document(v, slug, source, nom, apercu)
     fichiers["mentions-legales/index.html"] = page_mentions(v, apercu)
+    fichiers["merci/index.html"] = page_merci(v, apercu)
     fichiers["404.html"] = page_404(v, apercu)
 
     if _MANQUANTES and not apercu:

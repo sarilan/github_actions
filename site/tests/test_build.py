@@ -140,3 +140,45 @@ def test_echappement_html_des_valeurs(config_complete, tmp_path):
     sortie, _ = construire(config_complete(MANDATAIRE_ADRESSE="1 rue <X> & Y"), tmp_path)
     mentions = lire(sortie, "mentions-legales/index.html")
     assert "1 rue &lt;X&gt; &amp; Y" in mentions and "<X>" not in mentions
+
+
+LIENS_TEST = {
+    "STRIPE_LIEN_ABONNEMENT": "https://buy.stripe.com/test_abo",
+    "STRIPE_LIEN_FONDATEUR": "https://buy.stripe.com/test_fondateur",
+    "STRIPE_LIEN_DIAGNOSTIC": "https://buy.stripe.com/test_diag",
+    "STRIPE_LIEN_HOSPITALISATION": "https://buy.stripe.com/test_hosp",
+    "STRIPE_LIEN_EHPAD": "https://buy.stripe.com/test_ehpad",
+    "STRIPE_LIEN_SUCCESSION": "https://buy.stripe.com/test_succ",
+    "STRIPE_LIEN_DEMARCHE": "https://buy.stripe.com/test_dem",
+    "STRIPE_PORTAIL_CLIENT": "https://billing.stripe.com/p/login/test_portail",
+}
+
+
+def test_sans_liens_stripe_aucun_bouton_de_paiement(config_complete, tmp_path):
+    sortie, _ = construire(config_complete(), tmp_path)
+    accueil = lire(sortie, "index.html")
+    assert "buy.stripe.com" not in accueil and "Commander" not in accueil
+    assert "Gérer mon abonnement" not in accueil
+    assert (sortie / "merci/index.html").exists()
+    assert "noindex" in lire(sortie, "merci/index.html")
+
+
+def test_avec_liens_stripe(config_complete, tmp_path):
+    sortie, _ = construire(config_complete(**LIENS_TEST), tmp_path)
+    accueil = lire(sortie, "index.html")
+    for lien in LIENS_TEST.values():
+        assert f'href="{lien}"' in accueil
+    assert accueil.count(">Commander</a>") == 5
+    assert "S'abonner au tarif fondateur, 59 €/mois" in accueil
+    assert accueil.count('<th scope="col">') == 4
+
+
+@pytest.mark.parametrize("surcharges,message", [
+    ({"STRIPE_LIEN_ABONNEMENT": "https://exemple.fr/payer"}, "lien de paiement Stripe"),
+    ({"STRIPE_LIEN_DIAGNOSTIC": "https://buy.stripe.com/abc"}, "les liens des forfaits vont ensemble"),
+    ({"STRIPE_LIEN_FONDATEUR": "https://buy.stripe.com/abc"}, "STRIPE_LIEN_ABONNEMENT"),
+    ({"STRIPE_PORTAIL_CLIENT": "https://stripe.com/portail"}, "billing.stripe.com"),
+])
+def test_liens_stripe_incoherents_refuses(config_complete, tmp_path, surcharges, message):
+    with pytest.raises(build.ErreurBuild, match=message):
+        construire(config_complete(**surcharges), tmp_path)

@@ -52,6 +52,9 @@ Une valeur vide `""` signifie « non renseignée ». Toute clé peut aussi être
 | `ASSUREUR_RC_PRO` + `NUMERO_POLICE_RC_PRO` | CGV et mandat : l'attestation est remise avant la signature du mandat | assureur et numéro de police cités |
 | `MEDIATEUR_NOM` + `MEDIATEUR_ADRESSE` + `MEDIATEUR_SITE` | CGV : coordonnées du médiateur communiquées avant la conclusion du contrat | médiateur cité ; **obligatoire avant la première vente** (articles L. 612-1 et L. 616-1 du Code de la consommation) |
 | `LIGNE_2FA_RELAIS`, `EMAIL_2FA_RELAIS` | mandat : indiqués au parent lors de la signature | cités dans le mandat |
+| `STRIPE_LIEN_ABONNEMENT`, `STRIPE_LIEN_FONDATEUR` | bouton « Réserver un appel » seul | boutons « S'abonner » vers les liens de paiement Stripe (le lien fondateur suppose le lien normal) |
+| `STRIPE_LIEN_DIAGNOSTIC`, `_HOSPITALISATION`, `_EHPAD`, `_SUCCESSION`, `_DEMARCHE` | forfaits affichés sans bouton | bouton « Commander » sur chaque forfait (les 5 ensemble) |
+| `STRIPE_PORTAIL_CLIENT` | lien absent | lien « Gérer mon abonnement » dans le pied de page |
 
 ## Publier sur Cloudflare (Workers, ressources statiques)
 
@@ -79,6 +82,20 @@ Acheter le domaine dans Cloudflare (**Domain Registration**), l'ajouter au proje
 ## Stripe
 
 À l'activation du compte, indiquer l'adresse du site (`SITE_URL`). Stripe y vérifie la description du service, les prix, un moyen de contact et les conditions de vente, de résiliation et de rétractation : tout est présent sur la page d'accueil et dans `/cgv/`.
+
+### Liens de paiement à créer (Stripe → Catalogue de produits, puis Liens de paiement)
+
+| Produit | Prix | Type | Réglages du lien | Clé de `config.json` |
+|---|---|---|---|---|
+| Abonnement Relais | 89 € | récurrent, mensuel | — | `STRIPE_LIEN_ABONNEMENT` |
+| Abonnement Relais — tarif fondateur | 59 € | récurrent, mensuel (second prix du même produit) | limiter à 10 paiements | `STRIPE_LIEN_FONDATEUR` |
+| Diagnostic initial | 149 € | paiement unique | — | `STRIPE_LIEN_DIAGNOSTIC` |
+| Forfait Hospitalisation | 490 € | paiement unique | — | `STRIPE_LIEN_HOSPITALISATION` |
+| Forfait Entrée en EHPAD ou résidence | 690 € | paiement unique | — | `STRIPE_LIEN_EHPAD` |
+| Forfait Succession (volet administratif) | 890 € | paiement unique | — | `STRIPE_LIEN_SUCCESSION` |
+| Démarche isolée | 79 € | paiement unique | — | `STRIPE_LIEN_DEMARCHE` |
+
+Réglages communs à chaque lien : collecter l'adresse de facturation et le numéro de téléphone ; après le paiement, rediriger vers `SITE_URL/merci/` ; exiger l'acceptation des conditions (renseigner d'abord l'adresse `SITE_URL/cgv/` dans Paramètres → Détails publics). Portail client (Paramètres → Portail client) : activer la résiliation et la mise à jour du moyen de paiement, puis copier le lien de connexion dans `STRIPE_PORTAIL_CLIENT`.
 
 ## Image de partage
 
