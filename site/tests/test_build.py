@@ -18,16 +18,23 @@ def lire(sortie, nom):
     return (sortie / nom).read_text(encoding="utf-8")
 
 
-def test_config_du_depot_bloque_la_publication_tant_que_l_identite_manque(tmp_path):
+def test_config_du_depot_est_publiable(tmp_path):
     sortie, manquantes = construire(SITE / "config.json", tmp_path)
+    assert manquantes == {} and (sortie / "index.html").exists()
+
+
+def test_publication_bloquee_tant_que_l_identite_manque(config_complete, tmp_path):
+    vide = {cle: "" for cle in ("CONTACT_EMAIL", "MANDATAIRE_ADRESSE", "MANDATAIRE_CAPITAL",
+                                 "MANDATAIRE_VILLE_RCS", "MANDATAIRE_REPRESENTANT")}
+    sortie, manquantes = construire(config_complete(**vide), tmp_path)
     toutes = set().union(*manquantes.values())
     assert {"CONTACT_EMAIL", "MANDATAIRE_ADRESSE", "MANDATAIRE_CAPITAL",
             "MANDATAIRE_VILLE_RCS", "MANDATAIRE_REPRESENTANT"} <= toutes
     assert not sortie.exists(), "rien ne doit être écrit quand une valeur obligatoire manque"
 
 
-def test_apercu_construit_malgre_les_manques_et_n_est_pas_indexable(tmp_path):
-    sortie, manquantes = construire(SITE / "config.json", tmp_path, apercu=True)
+def test_apercu_construit_malgre_les_manques_et_n_est_pas_indexable(config_complete, tmp_path):
+    sortie, manquantes = construire(config_complete(CONTACT_EMAIL="", MANDATAIRE_ADRESSE=""), tmp_path, apercu=True)
     assert manquantes
     accueil = lire(sortie, "index.html")
     assert 'class="manquant"' in accueil and "noindex" in accueil
