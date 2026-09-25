@@ -1,0 +1,12 @@
+// Publication du site Relais sur Cloudflare Workers (ressources statiques, sans code serveur).
+// Le dossier dist/ est produit par la commande de build : python3 site/build.py
+// Procédure complète : site/README.md
+{
+  "name": "relais-parents",
+  "compatibility_date": "2026-09-25",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}

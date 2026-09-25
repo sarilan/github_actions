@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Construit le site public de Relais dans dist/, prêt à publier sur Cloudflare Pages.
+"""Construit le site public de Relais dans dist/, prêt à publier sur Cloudflare (voir wrangler.jsonc).
 
 Usage :
     python3 site/build.py                 # build de publication (échoue si une valeur manque)
@@ -42,6 +42,7 @@ from variables import VariablesManquantes, render  # noqa: E402
 
 SOURCES_JURIDIQUES = RACINE / "juridique" / "sources"
 AVERTISSEMENT = "Document à faire valider par un avocat avant utilisation."
+ADRESSES_TECHNIQUES = (".pages.dev", ".workers.dev")
 
 # (chemin publié, source Markdown, titre court pour la navigation)
 DOCUMENTS = [
@@ -474,9 +475,10 @@ def entetes(v: dict[str, str]) -> str:
 /og-image.png
   Cache-Control: public, max-age=604800
 """
-    if not v.get("SITE_URL", "").endswith(".pages.dev"):
-        # Domaine propre en place : l'adresse technique .pages.dev ne doit pas être indexée en doublon.
+    if not v.get("SITE_URL", "").endswith(ADRESSES_TECHNIQUES):
+        # Domaine propre en place : les adresses techniques de Cloudflare ne doivent pas être indexées en doublon.
         regles += "\nhttps://:project.pages.dev/*\n  X-Robots-Tag: noindex\n"
+        regles += "\nhttps://*.workers.dev/*\n  X-Robots-Tag: noindex\n"
     return regles
 
 

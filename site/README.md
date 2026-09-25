@@ -1,6 +1,6 @@
 # Site public de Relais
 
-Le site est construit par `site/build.py` dans le dossier `dist/`, puis publié sur **Cloudflare Pages** (offre gratuite, usage commercial autorisé).
+Le site est construit par `site/build.py` dans le dossier `dist/`, puis publié sur **Cloudflare** (Workers avec ressources statiques, offre gratuite, usage commercial autorisé).
 
 | Adresse | Contenu | Source |
 |---|---|---|
@@ -31,7 +31,7 @@ Une valeur vide `""` signifie « non renseignée ». Toute clé peut aussi être
 
 | Clé | Exemple |
 |---|---|
-| `SITE_URL` | `https://relais-parents.pages.dev`, puis le domaine propre une fois acheté |
+| `SITE_URL` | adresse `https://relais-parents.….workers.dev` du projet, puis le domaine propre une fois acheté |
 | `CONTACT_EMAIL` | adresse affichée sur le site et destinataire des demandes d'appel |
 | `MANDATAIRE_RAISON_SOCIALE`, `MANDATAIRE_FORME_JURIDIQUE`, `MANDATAIRE_SIREN` | `NESS ACADEMIE`, `SAS`, `978 575 397` (déjà remplis) |
 | `MANDATAIRE_CAPITAL` | `1 000` (sans le symbole €) |
@@ -53,33 +53,28 @@ Une valeur vide `""` signifie « non renseignée ». Toute clé peut aussi être
 | `MEDIATEUR_NOM` + `MEDIATEUR_ADRESSE` + `MEDIATEUR_SITE` | CGV : coordonnées du médiateur communiquées avant la conclusion du contrat | médiateur cité ; **obligatoire avant la première vente** (articles L. 612-1 et L. 616-1 du Code de la consommation) |
 | `LIGNE_2FA_RELAIS`, `EMAIL_2FA_RELAIS` | mandat : indiqués au parent lors de la signature | cités dans le mandat |
 
-## Publier sur Cloudflare Pages
+## Publier sur Cloudflare (Workers, ressources statiques)
 
-### Première mise en ligne, sans rien installer (recommandé)
+Le projet Cloudflare `relais-parents` est un Worker sans code serveur qui sert le dossier `dist/`. Sa configuration est versionnée dans `wrangler.jsonc` à la racine du dépôt (nom, dossier `dist`, page 404, barres obliques finales). Les en-têtes de `dist/_headers` s'appliquent comme sur Pages.
 
-1. Sur dash.cloudflare.com : **Workers & Pages → Créer → Pages → Se connecter à Git**, autoriser GitHub et choisir le dépôt `sarilan/github_actions`.
-2. Réglages du build :
+Réglages du projet (Workers & Pages → `relais-parents` → Paramètres → Build) :
 
-   | Champ | Valeur |
-   |---|---|
-   | Nom du projet | `relais-parents` (donne l'adresse `https://relais-parents.pages.dev`) |
-   | Branche de production | `claude/gallant-wozniak-a7exic` |
-   | Préréglage du framework | Aucun |
-   | Commande de build | `python3 site/build.py` |
-   | Répertoire de sortie | `dist` |
-   | Variable d'environnement | `SKIP_DEPENDENCY_INSTALL` = `1` (le build n'a besoin d'aucune dépendance) |
+| Champ | Valeur |
+|---|---|
+| Dépôt Git | `sarilan/github_actions` |
+| Branche de production | `claude/gallant-wozniak-a7exic` |
+| Commande de build | `python3 site/build.py` |
+| Commande de déploiement | `npx wrangler deploy` |
+| Répertoire racine | vide (racine du dépôt) |
+| Variable de build | `SKIP_DEPENDENCY_INSTALL` = `1` (le build n'a besoin d'aucune dépendance) |
 
-3. **Enregistrer et déployer.** Chaque nouveau commit sur la branche republie le site automatiquement.
+Chaque commit sur la branche de production reconstruit et republie le site. L'adresse publique est `https://relais-parents.<sous-domaine du compte>.workers.dev` (affichée dans l'onglet **Domaines** du projet) : la reporter dans `SITE_URL`.
 
-Si le nom `relais-parents` est déjà pris, Cloudflare en propose un autre : reporter l'adresse obtenue dans `SITE_URL` (fichier ou variable d'environnement du projet), puis relancer un déploiement.
-
-### Alternative : téléversement manuel
-
-Lancer `python3 site/build.py`, puis **Workers & Pages → Créer → Pages → Téléverser des ressources** et déposer le dossier `dist/`. À refaire à chaque modification.
+Vérification locale de la configuration : `python3 site/build.py && npx wrangler deploy --dry-run`.
 
 ### Domaine propre (plus tard)
 
-Acheter le domaine dans Cloudflare (**Domain Registration**), l'ajouter au projet (**Domaines personnalisés**), puis remplacer `SITE_URL` par `https://www.le-domaine.fr`. Le build ajoute alors automatiquement un en-tête `noindex` sur l'adresse technique `*.pages.dev` pour éviter le contenu en double.
+Acheter le domaine dans Cloudflare (**Domain Registration**), l'ajouter au projet (**Domaines → Ajouter un domaine personnalisé**), puis remplacer `SITE_URL` par `https://www.le-domaine.fr`. Le build ajoute alors automatiquement un en-tête `noindex` sur les adresses techniques `*.workers.dev` et `*.pages.dev` pour éviter le contenu en double.
 
 ## Stripe
 

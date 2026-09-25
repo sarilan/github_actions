@@ -131,6 +131,9 @@ def test_noindex_de_l_adresse_technique_seulement_avec_un_domaine_propre(config_
     assert "X-Robots-Tag" not in lire(sortie, "_headers")
     sortie, _ = construire(config_complete(SITE_URL="https://www.relais-parents.fr"), tmp_path / "b")
     assert "https://:project.pages.dev/*" in lire(sortie, "_headers")
+    assert "https://*.workers.dev/*" in lire(sortie, "_headers")
+    sortie, _ = construire(config_complete(SITE_URL="https://relais-parents.exemple.workers.dev"), tmp_path / "c")
+    assert "X-Robots-Tag" not in lire(sortie, "_headers")
 
 
 def test_echappement_html_des_valeurs(config_complete, tmp_path):

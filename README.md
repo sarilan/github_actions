@@ -48,7 +48,7 @@ Python 3.11 ou plus récent.
 |---|---|---|
 | 1. Juridique | `python3 juridique/generate.py` | Régénère et vérifie les 3 docx (articles numérotés, encadré avocat, en-tête, pagination). `--check` vérifie seulement. |
 | 1. Registre RGPD | `python3 juridique/registre.py` | Régénère et vérifie `registre-traitements-rgpd.xlsx` (5 traitements, colonnes CNIL). |
-| 2. Site | `python3 site/build.py` (`--apercu` pour prévisualiser) | Site complet dans `dist/` : accueil, CGV, confidentialité, mandat, mentions légales. Valeurs dans `site/config.json`, publication sur Cloudflare Pages : `site/README.md`. |
+| 2. Site | `python3 site/build.py` (`--apercu` pour prévisualiser) | Site complet dans `dist/` : accueil, CGV, confidentialité, mandat, mentions légales. Valeurs dans `site/config.json`, publication sur Cloudflare (`wrangler.jsonc`) : `site/README.md`. |
 | 3. Google Ads | `python3 ads/build.py && python3 ads/check.py` | Régénère et contrôle les CSV d'import ; procédure d'import dans `ads/README.md`. |
 | 4. Procédures | lire `procedures/index.md` | 12 fiches Markdown. |
 | 5. Airtable | `python3 outils/airtable/create_base.py [--dry-run]` puis `python3 outils/airtable/seed.py` | Crée la base « Relais — Gestion » (idempotent) et insère 2 dossiers fictifs. Les 6 vues sont à créer à la main ou via le connecteur Airtable : le script imprime filtre, tri et regroupement de chacune. |
@@ -100,7 +100,7 @@ Prénoms et coordonnées (`PRENOM_ENFANT`, `PRENOM_PARENT`, `NOM_PARENT`, `CIVIL
 3. **Boîte postale de traitement du courrier** (service de domiciliation avec scan quotidien, hébergement UE) et mise en place des sous-adresses par client.
 4. **Numéro de téléphone français** (ligne dédiée parents et ligne 2FA) et adresse électronique dédiée aux codes de vérification.
 5. **Compte Formspree (facultatif)** : sans lui, le formulaire du site ouvre la messagerie du visiteur avec sa demande rédigée ; avec lui, reporter `FORMSPREE_ENDPOINT` et `FORMSPREE_ENTITE` dans `site/config.json`.
-6. **Hébergement du site** sur Cloudflare Pages (procédure dans `site/README.md`) ; nom de domaine plus tard (relais-admin.fr, monrelais.fr, relais-parents.fr à vérifier) ; **médiateur de la consommation** à désigner avant la première vente.
+6. **Hébergement du site** sur Cloudflare (procédure dans `site/README.md`) ; nom de domaine plus tard (relais-admin.fr, monrelais.fr, relais-parents.fr à vérifier) ; **médiateur de la consommation** à désigner avant la première vente.
 7. **Compte Airtable** : jeton d'accès personnel avec les portées `schema.bases:read`, `schema.bases:write`, `data.records:read`, `data.records:write`, identifiant de l'espace de travail ; exécution de `create_base.py` puis création des 6 vues (l'API ne permet pas de créer des vues) ; suppression des 2 dossiers fictifs avant la production.
 8. **Compte Google Ads** : import des CSV dans Google Ads Editor, action de conversion, réglages manuels et lancement (`ads/README.md`) ; l'activation de la mesure suppose un bandeau de consentement sur le site.
 9. **Coffre Bitwarden Teams** : création des collections, invitation des opérateurs, journal d'accès.
