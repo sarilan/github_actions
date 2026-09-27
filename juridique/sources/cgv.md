@@ -43,13 +43,14 @@ Le Prestataire peut modifier ses tarifs. Toute modification est notifiée au Cli
 
 ## Article — Souscription
 
-La souscription s'effectue à distance en trois temps :
+La souscription s'effectue à distance en quatre temps :
 
 - un premier contact par le formulaire du site ou par courriel, suivi d'un appel de présentation de vingt minutes ;
-- l'envoi par courriel des présentes CGV, de la politique de confidentialité et du Mandat au Client et au Bénéficiaire ; un appel avec le Bénéficiaire permet de répondre à ses questions ;
-- la signature du Mandat par le Bénéficiaire (signature électronique ou signature manuscrite scannée), la transmission d'une copie de la pièce d'identité du Bénéficiaire et du Client, et la confirmation de la commande par le Client.
+- après l'accord de principe du Client, l'envoi par courriel des présentes CGV, de la politique de confidentialité, du Mandat et du lien de paiement ; un appel avec le Bénéficiaire permet de répondre à ses questions ;
+- le paiement en ligne par le Client, au cours duquel il accepte les présentes CGV et peut demander expressément que l'exécution du service commence avant la fin du délai de rétractation ;
+- la signature du Mandat par le Bénéficiaire, de façon manuscrite ou électronique, et la transmission d'une copie de la pièce d'identité du Bénéficiaire et du Client par le lien de dépôt sécurisé communiqué par le Prestataire, à l'exclusion de tout autre canal.
 
-Le contrat est formé à la date de confirmation écrite du Prestataire au Client, après réception du Mandat signé. Le Prestataire se réserve le droit de refuser une souscription lorsque le Bénéficiaire fait l'objet d'une mesure de protection juridique, lorsque la situation relève d'un contentieux lourd nécessitant un professionnel du droit, ou lorsque les vérifications d'identité ne peuvent aboutir.
+Le contrat est formé à la date du paiement. L'exécution du service commence à la réception du Mandat signé. Si le Mandat n'est pas signé dans les trente (30) jours suivant le paiement, ou si le Prestataire refuse la souscription pour l'un des motifs ci-après, le contrat est résolu et les sommes versées sont intégralement remboursées au Client. Le Prestataire se réserve le droit de refuser une souscription lorsque le Bénéficiaire fait l'objet d'une mesure de protection juridique, lorsque la situation relève d'un contentieux lourd nécessitant un professionnel du droit, ou lorsque les vérifications d'identité ne peuvent aboutir.
 
 ## Article — Délais d'exécution
 
@@ -94,23 +95,21 @@ Le service ne comprend pas, et le Prestataire refuse d'accomplir :
 
 ## Article — Prix, facturation et paiement
 
-L'abonnement est facturé mensuellement, d'avance, à la date anniversaire de la souscription, par prélèvement sur carte bancaire ou virement. Les forfaits et la démarche isolée sont facturés à la commande. Les factures sont adressées par courriel au Client.
+L'abonnement est facturé mensuellement, d'avance, à la date anniversaire de la souscription, par carte bancaire au moyen du service de paiement sécurisé Stripe. Les forfaits et la démarche isolée sont facturés à la commande. Les factures sont adressées par courriel au Client et restent consultables dans l'espace de gestion de son abonnement.
+
+Lorsque le diagnostic initial a été payé séparément et que le Client souscrit l'abonnement dans les trente (30) jours suivant la remise du rapport de diagnostic, le prix du diagnostic est déduit des premières mensualités.
 
 En cas de défaut de paiement à l'échéance, le Prestataire adresse un rappel par courriel. À défaut de régularisation sous quinze (15) jours, le service peut être suspendu, après information du Client et du Bénéficiaire, jusqu'au règlement. Les Démarches urgentes en cours sont achevées avant toute suspension.
 
 ## Article — Taxes
 
-Conformément aux règles de territorialité de la TVA applicables aux prestations de services fournies à des consommateurs :
+Les prix indiqués sont des prix toutes taxes comprises. La taxe sur la valeur ajoutée est déterminée selon les règles françaises de territorialité applicables aux prestations de services fournies à des consommateurs. Lorsque le Prestataire relève du régime de la franchise en base, les factures portent la mention « TVA non applicable, article 293 B du Code général des impôts ». Dans le cas contraire, la TVA française au taux en vigueur est comprise dans le prix affiché et figure sur la facture.
 
-- Client résidant hors de l'Union européenne : facturation hors TVA française, le lieu d'imposition étant situé hors de France ; le Client fait son affaire des taxes éventuellement dues dans son pays de résidence ;
-- Client résidant dans un autre État membre de l'Union européenne : application de la TVA de l'État de résidence du Client au-delà du seuil européen de 10 000 € de ventes à distance intracommunautaires, via le guichet unique (OSS), et de la TVA française en deçà de ce seuil ;
-- Client résidant en France : TVA française au taux en vigueur.
-
-Le pays de résidence du Client est établi à partir de l'adresse de facturation et du pays de la carte bancaire ou du compte utilisé pour le paiement.
+Le Client fait son affaire des taxes éventuellement dues dans son pays de résidence.
 
 ## Article — Durée et résiliation
 
-L'abonnement est conclu sans engagement de durée. Le Client peut le résilier à tout moment, par courriel à {{MANDATAIRE_EMAIL}} ou par courrier, avec effet à la fin du mois civil en cours. Aucun frais de résiliation n'est dû. Les sommes versées pour le mois en cours restent acquises.
+L'abonnement est conclu sans engagement de durée. Le Client peut le résilier à tout moment, par courriel à {{MANDATAIRE_EMAIL}} ou par courrier, ou en ligne depuis l'espace de gestion de son abonnement, avec effet à la fin de la période mensuelle en cours, soit la veille de la prochaine échéance. Aucun frais de résiliation n'est dû. Les sommes versées pour la période en cours restent acquises.
 
 Le Bénéficiaire peut révoquer le Mandat à tout moment, ce qui met fin à l'abonnement dans les mêmes conditions.
 
@@ -148,7 +147,7 @@ Les présentes CGV sont soumises au droit français. Le Client résidant à l'é
 
 ## Article — Dispositions diverses
 
-Si l'une des clauses des présentes est déclarée nulle, les autres clauses conservent leur effet. Le fait pour le Prestataire de ne pas se prévaloir d'un manquement ne vaut pas renonciation. Les présentes CGV, la politique de confidentialité et le Mandat constituent l'intégralité de l'accord entre les parties. Les CGV applicables sont celles en vigueur à la date de la souscription ; en cas de modification, la nouvelle version est communiquée au Client trente (30) jours avant son application.
+Si l'une des clauses des présentes est déclarée nulle, les autres clauses conservent leur effet. Le fait pour le Prestataire de ne pas se prévaloir d'un manquement ne vaut pas renonciation. Les présentes CGV, la politique de confidentialité et le Mandat constituent l'intégralité de l'accord entre les parties. Les CGV applicables sont celles en vigueur à la date de la souscription ; en cas de modification, la nouvelle version est communiquée au Client trente (30) jours avant son application. Le Prestataire peut transférer le présent contrat à une société qu'il contrôle ou qui reprend l'exploitation du service Relais, après en avoir informé par écrit le Client et le Bénéficiaire au moins trente (30) jours à l'avance ; le Client peut alors résilier sans frais avant la date du transfert. Le transfert du Mandat reste soumis à l'accord du Bénéficiaire.
 
 ## Annexe — Formulaire de rétractation
 

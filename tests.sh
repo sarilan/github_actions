@@ -11,6 +11,9 @@ echo "== Site =="
 python3 -m pytest site/tests -q
 python3 site/build.py --apercu --sortie "$(mktemp -d)/apercu" >/dev/null && echo "✔ aperçu du site construit"
 
+echo "== Worker (formulaire et paiements) =="
+(cd worker && node --test tests/*.test.js)
+
 echo "== Google Ads =="
 python3 ads/check.py
 

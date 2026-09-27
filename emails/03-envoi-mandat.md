@@ -16,14 +16,15 @@ Bonjour {{PRENOM_ENFANT}},
 Merci pour notre échange. Comme convenu, voici les documents qui cadrent notre intervention :
 
 1. **Le mandat de représentation administrative**, que signera {{PRENOM_PARENT}}. Il liste précisément ce que nous pouvons faire (courrier, comptes en ligne, demandes, réclamations, résiliations, rendez-vous) et ce que nous ne ferons jamais : aucune opération financière, aucun acte de disposition, aucun engagement de crédit. Il est valable douze mois, révocable à tout moment par simple écrit. Vous y figurez comme personne de confiance : vous recevez copie du mandat, les rapports et toute alerte.
-2. **Les conditions générales de vente** (abonnement {{OFFRE}}, résiliation sans préavis à la fin du mois, droit de rétractation de 14 jours).
+2. **Les conditions générales de vente** (abonnement {{OFFRE}}, résiliation sans frais à la fin de la période mensuelle en cours, droit de rétractation de 14 jours).
 3. **La politique de confidentialité** : où sont les données, qui y accède, combien de temps.
 
 Ce que je vous propose maintenant :
 
 - Vous lisez le mandat et vous me signalez tout point à ajuster (par exemple un organisme à ajouter dans la liste de l'annexe 1).
 - Je téléphone à {{PRENOM_PARENT}} le {{DATE_APPEL_PARENT}} à {{HEURE_APPEL_PARENT}} pour me présenter, expliquer simplement ce que nous ferons et ce que nous ne ferons pas, et répondre à ses questions. Si vous souhaitez être en ligne à trois, dites-le-moi.
-- {{PRENOM_PARENT}} signe le mandat (signature électronique par SMS, ou sur papier avec l'enveloppe retour), coche les organismes concernés et écrit la mention « Bon pour mandat ». Nous avons aussi besoin d'une copie de sa pièce d'identité et de la vôtre.
+- Vous réglez l'abonnement par ce lien de paiement sécurisé : {{LIEN_PAIEMENT}}. Au moment du paiement, vous acceptez les conditions générales et pouvez demander que le service commence sans attendre la fin du délai de rétractation. Si le mandat n'est pas signé dans les 30 jours, vous êtes intégralement remboursé(e).
+- {{PRENOM_PARENT}} signe le mandat (signature électronique par SMS, ou sur papier avec l'enveloppe retour) : il est prérempli, il n'y a qu'à vérifier et signer. Nous avons aussi besoin d'une copie de sa pièce d'identité et de la vôtre, à déposer uniquement par ce lien sécurisé : {{LIEN_DEPOT}}. Merci de ne jamais les envoyer par courriel ni par messagerie.
 - Dès réception, je vous confirme le démarrage et le diagnostic commence.
 
 Rien ne démarre sans l'accord de votre parent. Si {{PRENOM_PARENT}} hésite, nous prenons le temps qu'il faut.
@@ -63,4 +64,4 @@ Avec mes salutations respectueuses,
 {{PRENOM_FONDATEUR}}
 Relais — {{MANDATAIRE_TELEPHONE}}
 
-Pièces jointes : le mandat, une notice « Comment signer » avec les endroits où cocher et écrire « Bon pour mandat », une enveloppe retour déjà timbrée si vous préférez le papier.
+Pièces jointes : le mandat déjà rempli, une notice « Comment signer » qui montre le seul endroit où signer, une enveloppe retour déjà timbrée si vous préférez le papier.

@@ -67,7 +67,7 @@ Réglages du projet (Workers & Pages → `relais-parents` → Paramètres → Bu
 | Dépôt Git | `sarilan/github_actions` |
 | Branche de production | `claude/gallant-wozniak-a7exic` |
 | Commande de build | `python3 site/build.py` |
-| Commande de déploiement | `npx wrangler deploy` |
+| Commande de déploiement | `npx wrangler deploy` (déploie le Worker `worker/index.js` et le dossier `dist/`) |
 | Répertoire racine | vide (racine du dépôt) |
 | Variable de build | `SKIP_DEPENDENCY_INSTALL` = `1` (le build n'a besoin d'aucune dépendance) |
 
@@ -96,6 +96,47 @@ Acheter le domaine dans Cloudflare (**Domain Registration**), l'ajouter au proje
 | Démarche isolée | 79 € | paiement unique | — | `STRIPE_LIEN_DEMARCHE` |
 
 Réglages communs à chaque lien : collecter l'adresse de facturation et le numéro de téléphone ; après le paiement, rediriger vers `SITE_URL/merci/` ; exiger l'acceptation des conditions (renseigner d'abord l'adresse `SITE_URL/cgv/` dans Paramètres → Détails publics). Portail client (Paramètres → Portail client) : activer la résiliation et la mise à jour du moyen de paiement, puis copier le lien de connexion dans `STRIPE_PORTAIL_CLIENT`.
+
+### Liens créés (27 septembre 2026, compte Stripe en mode réel)
+
+Le paiement se fait **après l'appel de présentation** : les liens ci-dessous sont envoyés dans le courriel 03 (`{{LIEN_PAIEMENT}}`), et les clés `STRIPE_LIEN_*` de `config.json` restent vides pour que la page d'accueil ne propose que « Réserver un appel ». Seul le portail client est publié (pied de page).
+
+| Offre | Lien | Réglages |
+|---|---|---|
+| Abonnement 89 €/mois | https://buy.stripe.com/28E6oHavabaIb8r5INc7u00 | produit `relais_abonnement` |
+| Tarif fondateur 59 €/mois | https://buy.stripe.com/fZu28r46M2Ec2BV1sxc7u01 | limité à 10 paiements, message de fin d'offre |
+| Diagnostic initial 149 € | https://buy.stripe.com/aFa3cv46MdiQccv7QVc7u02 | facture PDF |
+| Hospitalisation 490 € | https://buy.stripe.com/28E3cv32Ia6E90jb37c7u03 | facture PDF |
+| Entrée en EHPAD ou résidence 690 € | https://buy.stripe.com/eVqeVdgTy6Us7Wf0otc7u04 | facture PDF |
+| Succession 890 € | https://buy.stripe.com/eVq6oH1YE1A85O7gnrc7u05 | facture PDF |
+| Démarche isolée 79 € | https://buy.stripe.com/7sY4gz7iY5Qo3FZ5INc7u06 | facture PDF |
+| Portail client | https://billing.stripe.com/p/login/28E6oHavabaIb8r5INc7u00 | résiliation en fin de période, carte, factures, coordonnées |
+
+Chaque lien : adresse de facturation et téléphone obligatoires, champ « Votre parent : nom et ville », champ obligatoire « J'accepte les CGV et demande que le service commence tout de suite » (preuve de la demande d'exécution anticipée), redirection vers `/merci/`, métadonnée `offre` pour relier le paiement à la table Prospects. Les forfaits portent le suffixe de relevé `RELAIS`.
+
+Réglages restant à faire dans le tableau de bord Stripe (non disponibles par l'API) : **Paramètres → Détails publics** (nom public « Relais », URL des CGV, courriel et téléphone d'assistance) ; **Paramètres → Libellé de relevé** (`RELAIS`) ; **Paramètres → Facturation → Factures** (pied de page avec raison sociale, SIREN, adresse du siège et mention de TVA retenue, numérotation continue). Après un changement de domaine, mettre à jour la redirection de chaque lien.
+
+## Worker : formulaire et paiements reliés à Airtable
+
+Le Worker `worker/index.js` sert les pages de `dist/` et ajoute deux routes (configuration dans `wrangler.jsonc`) :
+
+| Route | Rôle | En cas de problème |
+|---|---|---|
+| `POST /api/demande` | Le formulaire « Réserver un appel » crée une ligne **Demande reçue** dans la table **Prospects** (pays, ville et âge du parent, démarche, courriel, créneau, source, `gclid` Google Ads). | Sans configuration ou si Airtable ne répond pas, la page ouvre la messagerie du visiteur avec la demande rédigée : aucune demande n'est perdue. |
+| `POST /api/stripe` | Chaque paiement Stripe (`checkout.session.completed`) retrouve le prospect par son courriel et le passe au statut **Payé** avec la date, le montant, l'offre, les identifiants Stripe et l'accord d'exécution anticipée. Sans prospect connu, une ligne « à vérifier » est créée. | Signature invalide refusée ; en cas d'erreur Airtable, Stripe renvoie la notification plus tard. |
+
+Le point de terminaison Stripe est déjà créé (Développeurs → Webhooks → `…/api/stripe`, événement `checkout.session.completed`). À un changement de domaine, modifier son URL.
+
+### Deux secrets à déclarer une fois
+
+Cloudflare → Workers & Pages → `relais-parents` → Paramètres → **Variables et secrets** → Ajouter, type **Secret** :
+
+1. `AIRTABLE_TOKEN` : Airtable → Builder hub → **Personal access tokens** → Create token ; portées `data.records:read` et `data.records:write` ; accès limité à la base « Relais — Gestion ».
+2. `STRIPE_WEBHOOK_SECRET` : Stripe → Développeurs → Webhooks → point de terminaison `…/api/stripe` → **Secret de signature** → Révéler (commence par `whsec_`).
+
+`AIRTABLE_BASE_ID` et `AIRTABLE_TABLE` sont déjà déclarés dans `wrangler.jsonc`. Le déploiement suivant les prend en compte ; vérifier en envoyant une demande test depuis le site, puis la supprimer dans Airtable.
+
+Tests : `cd worker && node --test tests/*.test.js` (14 tests : validation, champ piège, repli, signature Stripe, mise à jour sans recul de statut).
 
 ## Image de partage
 

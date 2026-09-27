@@ -1,12 +1,24 @@
-// Publication du site Relais sur Cloudflare Workers (ressources statiques, sans code serveur).
+// Publication du site Relais sur Cloudflare Workers.
 // Le dossier dist/ est produit par la commande de build : python3 site/build.py
+// Le Worker (worker/index.js) sert ces pages et répond aux deux routes /api :
+//   /api/demande  formulaire « Réserver un appel » → table Prospects d'Airtable
+//   /api/stripe   notifications de paiement Stripe → statut « Payé » dans Prospects
+// Secrets à déclarer dans Cloudflare (Paramètres → Variables et secrets) : AIRTABLE_TOKEN, STRIPE_WEBHOOK_SECRET.
 // Procédure complète : site/README.md
 {
   "name": "relais-parents",
+  "main": "worker/index.js",
   "compatibility_date": "2026-09-25",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash"
-  }
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "AIRTABLE_BASE_ID": "app7wEB3SPXhGDQsw",
+    "AIRTABLE_TABLE": "Prospects"
+  },
+  "observability": { "enabled": true }
 }

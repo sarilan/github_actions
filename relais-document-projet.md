@@ -171,7 +171,7 @@ Hospitalisation, déménagement, décès : déclenchement du forfait corresponda
 Deux options selon la situation du parent :
 
 1. **Réexpédition La Poste** vers une boîte postale de traitement (service de domiciliation avec scan quotidien, ~30 €/mois par boîte, mutualisée sur plusieurs clients via des sous-adresses). Le courrier personnel est renvoyé au parent.
-2. **Scan local** : le parent ou un proche photographie le courrier avec une application mobile (WhatsApp suffit au démarrage).
+2. **Scan local** : le parent ou un proche photographie le courrier et le dépose par le lien de dépôt sécurisé du dossier (jamais par messagerie instantanée ni par courriel).
 
 ### 7.2 Outil de gestion
 
@@ -251,7 +251,7 @@ Révocable à tout moment par simple courrier. Durée 12 mois renouvelable.
 
 ### 8.4 Structure de facturation
 
-- Le client payeur (l'enfant) est hors de France : facturation sans TVA pour un client hors UE, TVA du pays du client pour un particulier dans l'UE (seuil OSS).
+- Le client payeur est un consommateur : prix affichés TTC ; lieu de la prestation en France selon la règle générale (article 259-2° du CGI), sous réserve de validation par un expert-comptable ; franchise en base tant que le chiffre d'affaires reste sous le seuil (37 500 € en 2026, seuil majoré 41 250 €), puis TVA française.
 - Structure possible : la SAS existante (NESS ACADEMIE) comme véhicule de lancement, ou création d'une structure dédiée au moment de l'embauche du premier opérateur.
 - Assurance responsabilité civile professionnelle obligatoire avant le premier client (≈ 400 à 800 €/an).
 

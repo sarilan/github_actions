@@ -540,7 +540,7 @@
         <h2 id="titre-contact">Réservez un appel de 20 minutes</h2>
         <p class="intro">Six questions, une minute. Nous vous rappelons sous 24 h ouvrées au créneau que vous indiquez. Sans engagement.</p>
 
-        <form class="formulaire" id="formulaire-contact" action="{{#FORMSPREE_ENDPOINT}}{{FORMSPREE_ENDPOINT}}{{/FORMSPREE_ENDPOINT}}{{^FORMSPREE_ENDPOINT}}mailto:{{CONTACT_EMAIL}}{{/FORMSPREE_ENDPOINT}}" method="POST" data-envoi="{{#FORMSPREE_ENDPOINT}}formulaire{{/FORMSPREE_ENDPOINT}}{{^FORMSPREE_ENDPOINT}}courriel{{/FORMSPREE_ENDPOINT}}" data-destinataire="{{CONTACT_EMAIL}}" novalidate>
+        <form class="formulaire" id="formulaire-contact" action="{{#FORMSPREE_ENDPOINT}}{{FORMSPREE_ENDPOINT}}{{/FORMSPREE_ENDPOINT}}{{^FORMSPREE_ENDPOINT}}/api/demande{{/FORMSPREE_ENDPOINT}}" method="POST" data-envoi="{{#FORMSPREE_ENDPOINT}}formulaire{{/FORMSPREE_ENDPOINT}}{{^FORMSPREE_ENDPOINT}}api{{/FORMSPREE_ENDPOINT}}" data-destinataire="{{CONTACT_EMAIL}}" novalidate>
           <div class="rangee">
             <div class="champ">
               <label for="pays">1. Dans quel pays vivez-vous ?</label>
@@ -594,6 +594,8 @@
             <label for="site-web">Ne pas remplir</label>
             <input type="text" id="site-web" name="_gotcha" tabindex="-1" autocomplete="off">
           </div>
+          <input type="hidden" name="gclid" id="gclid" value="">
+          <input type="hidden" name="source" id="source" value="">
           <input type="hidden" name="_subject" value="Nouvelle demande d'appel — Relais">
           <input type="hidden" name="_language" value="fr">
           <p class="rgpd">En envoyant ce formulaire, vous acceptez que Relais utilise ces informations pour vous rappeler et organiser l'appel. Elles sont conservées trois ans au plus si vous ne souscrivez pas. Voir la <a href="/confidentialite/">politique de confidentialité</a>.</p>
@@ -686,6 +688,20 @@
         return premierInvalide;
       }
 
+      // Origine de la visite : identifiant de clic Google Ads (gclid) et source de campagne (utm_source),
+      // lus dans l'adresse de la page et gardés le temps de la visite. Aucun cookie n'est déposé.
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        ['gclid', 'source'].forEach(function (cle) {
+          var valeur = params.get(cle === 'source' ? 'utm_source' : cle) || '';
+          try {
+            if (valeur) { sessionStorage.setItem('relais-' + cle, valeur); }
+            else { valeur = sessionStorage.getItem('relais-' + cle) || ''; }
+          } catch (e) { /* stockage indisponible : on garde la valeur de l'adresse */ }
+          document.getElementById(cle).value = valeur.slice(0, 200);
+        });
+      })();
+
       regles.forEach(function (regle) {
         var champ = document.getElementById(regle.id);
         champ.addEventListener('input', function () {
@@ -726,11 +742,13 @@
           invalide.focus();
           return;
         }
-        if (form.getAttribute('data-envoi') === 'courriel') {
+        var modeApi = form.getAttribute('data-envoi') === 'api';
+        function parMessagerie() {
+          // Dernier recours si l'enregistrement direct est indisponible : la messagerie du visiteur
+          // s'ouvre avec la demande déjà rédigée.
           window.location.href = lienCourriel();
           succesCourriel.hidden = false;
           succesCourriel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
         }
         var action = form.getAttribute('action');
         bouton.disabled = true;
@@ -742,11 +760,13 @@
               form.reset();
               succes.hidden = false;
               succes.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (modeApi && reponse.status !== 400) {
+              parMessagerie();
             } else {
               echec.hidden = false;
             }
           })
-          .catch(function () { echec.hidden = false; })
+          .catch(function () { if (modeApi) { parMessagerie(); } else { echec.hidden = false; } })
           .then(function () {
             bouton.disabled = false;
             bouton.textContent = 'Demander à être rappelé';

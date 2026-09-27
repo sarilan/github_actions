@@ -14,3 +14,7 @@ outils/rapport/sorties/
 outils/airtable/.base_id
 dist/
 dist-apercu/
+
+# Wrangler (dev local)
+.wrangler/
+node_modules/

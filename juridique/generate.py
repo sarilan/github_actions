@@ -239,7 +239,7 @@ def _add_table(doc: Document, rows: list[list[str]]) -> None:
 
 def _add_signatures(doc: Document) -> None:
     p = doc.add_paragraph()
-    p.add_run("Fait à ……………………………………, le ……… / ……… / ………………, en deux exemplaires originaux.")
+    p.add_run("Fait à ……………………………………, le ……… / ……… / ……………….")
     p.paragraph_format.space_before = Pt(10)
 
     table = doc.add_table(rows=2, cols=2)
@@ -249,7 +249,7 @@ def _add_signatures(doc: Document) -> None:
     left.paragraphs[0].add_run("Le Mandant").bold = True
     left.add_paragraph("Nom, prénom : ……………………………………")
     q = left.add_paragraph()
-    q.add_run("Mention manuscrite obligatoire : « Bon pour mandat »").italic = True
+    q.add_run("Signature manuscrite ou électronique").italic = True
     left.add_paragraph("\n\n\nSignature :")
     right.paragraphs[0].add_run("Le Mandataire").bold = True
     right.add_paragraph("{{MANDATAIRE_RAISON_SOCIALE}} — service Relais")

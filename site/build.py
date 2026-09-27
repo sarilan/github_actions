@@ -138,9 +138,9 @@ def ancre(texte: str) -> str:
 def signatures_html(v: dict[str, str]) -> str:
     raison = inline(v.get("MANDATAIRE_RAISON_SOCIALE", ""))
     representant = inline(v.get("MANDATAIRE_REPRESENTANT", ""))
-    return f"""<p>Fait à ……………………………………, le ……… / ……… / ………………, en deux exemplaires originaux.</p>
+    return f"""<p>Fait à ……………………………………, le ……… / ……… / ……………….</p>
 <div class="signatures">
-  <div><p><strong>Le Mandant</strong></p><p>Nom, prénom : ……………………………………</p><p><em>Mention manuscrite obligatoire : « Bon pour mandat »</em></p><p class="zone-signature">Signature :</p></div>
+  <div><p><strong>Le Mandant</strong></p><p>Nom, prénom : ……………………………………</p><p><em>Signature manuscrite ou électronique</em></p><p class="zone-signature">Signature :</p></div>
   <div><p><strong>Le Mandataire</strong></p><p>{raison} — service Relais</p><p>Représenté par : {representant}</p><p class="zone-signature">Signature et cachet :</p></div>
   <div class="large"><p><strong>Copie reçue par la Personne de confiance</strong></p><p>Nom, prénom : ……………………………………   Date : ……… / ……… / ………………</p><p>Je reconnais avoir reçu copie du présent mandat et accepte d'être destinataire des rapports et des alertes.</p><p class="zone-signature">Signature :</p></div>
 </div>"""
@@ -433,13 +433,14 @@ def page_merci(v: dict[str, str], apercu: bool) -> str:
     """Page de retour après un paiement Stripe (à indiquer comme redirection dans chaque lien de paiement)."""
     contact = html.escape(v.get("CONTACT_EMAIL", ""))
     contenu = f"""      <h1>Merci, votre paiement est confirmé</h1>
-      <p class="chapeau">Stripe vous a envoyé un reçu par courriel.</p>
+      <p class="chapeau">Stripe vous a envoyé un reçu et votre facture par courriel.</p>
       <h2>La suite</h2>
       <ol>
-        <li>Nous vous appelons sous 24 h ouvrées pour faire le point sur la situation de votre parent.</li>
-        <li>Nous appelons ensuite votre parent pour lui présenter le service, puis vous envoyons à tous deux le mandat à signer.</li>
-        <li>Dès la signature, nous commençons le diagnostic et le traitement des démarches.</li>
+        <li>Si ce n'est pas encore fait, nous appelons votre parent pour lui présenter le service et répondre à ses questions.</li>
+        <li>Votre parent signe le mandat, par SMS ou sur papier avec l'enveloppe retour. Vous déposez vos deux pièces d'identité par le lien sécurisé que nous vous envoyons.</li>
+        <li>Dès réception du mandat signé, nous vous confirmons le démarrage par courriel et le diagnostic commence.</li>
       </ol>
+      <p>Si le mandat n'est pas signé dans les 30 jours, nous vous remboursons intégralement.</p>
       <p>Une question d'ici là : <a href="mailto:{contact}">{contact}</a>.</p>
       <p><a href="/">Revenir à l'accueil</a></p>"""
     return page(v, chemin="/merci/", titre="Paiement confirmé", description="Confirmation de paiement et prochaines étapes.",

@@ -65,15 +65,18 @@ def test_numerotation_des_articles_identique_aux_documents_word(config_complete,
 def test_mandat_contient_signatures_et_liste_des_organismes(config_complete, tmp_path):
     sortie, _ = construire(config_complete(), tmp_path)
     mandat = lire(sortie, "mandat/index.html")
-    assert "Bon pour mandat" in mandat and "Représenté par : Camille Exemple" in mandat
+    assert "Signature manuscrite ou électronique" in mandat and "Représenté par : Camille Exemple" in mandat
     assert mandat.count('<td class="case"') == len(build.ORGANISMES_CHECKLIST)
     assert "☐ Je consens au traitement de mes données de santé" in mandat
 
 
-def test_sans_formspree_le_formulaire_passe_par_la_messagerie(config_complete, tmp_path):
+def test_sans_formspree_le_formulaire_passe_par_le_worker(config_complete, tmp_path):
     sortie, _ = construire(config_complete(), tmp_path)
     accueil = lire(sortie, "index.html")
-    assert 'action="mailto:contact@exemple.fr"' in accueil and 'data-envoi="courriel"' in accueil
+    assert 'action="/api/demande"' in accueil and 'data-envoi="api"' in accueil
+    # Repli par messagerie si l'enregistrement direct échoue, et récupération du gclid sans cookie.
+    assert 'data-destinataire="contact@exemple.fr"' in accueil and "parMessagerie()" in accueil
+    assert 'name="gclid"' in accueil and "utm_source" in accueil
     assert "Formspree" not in lire(sortie, "confidentialite/index.html")
     assert "formspree.io" not in lire(sortie, "_headers")
     assert "tel:" not in accueil and '"telephone"' not in accueil
@@ -155,7 +158,7 @@ LIENS_TEST = {
 
 
 def test_sans_liens_stripe_aucun_bouton_de_paiement(config_complete, tmp_path):
-    sortie, _ = construire(config_complete(), tmp_path)
+    sortie, _ = construire(config_complete(STRIPE_PORTAIL_CLIENT=""), tmp_path)
     accueil = lire(sortie, "index.html")
     assert "buy.stripe.com" not in accueil and "Commander" not in accueil
     assert "Gérer mon abonnement" not in accueil
@@ -182,3 +185,14 @@ def test_avec_liens_stripe(config_complete, tmp_path):
 def test_liens_stripe_incoherents_refuses(config_complete, tmp_path, surcharges, message):
     with pytest.raises(build.ErreurBuild, match=message):
         construire(config_complete(**surcharges), tmp_path)
+
+
+def test_config_publiee_sans_bouton_de_paiement_avec_portail(config_complete, tmp_path):
+    """Configuration réelle : paiement envoyé après l'appel (courriel 03), seul le portail client est publié."""
+    sortie, _ = construire(config_complete(), tmp_path)
+    accueil = lire(sortie, "index.html")
+    assert "buy.stripe.com" not in accueil
+    assert "Gérer mon abonnement" in accueil and "billing.stripe.com/p/login/" in accueil
+    assert "Réserver un appel" in accueil
+    merci = lire(sortie, "merci/index.html")
+    assert "30 jours" in merci and "remboursons" in merci

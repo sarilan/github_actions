@@ -142,7 +142,7 @@ Le présent mandat est soumis au droit français. En cas de difficulté, les par
 
 ## Article — Exemplaires
 
-Le présent mandat est établi en deux exemplaires originaux, un pour chaque partie. Une copie est remise à la Personne de confiance. Le Mandataire peut délivrer aux organismes qui en font la demande une copie ou un extrait du présent mandat limité aux mentions utiles.
+Le présent mandat est établi en un exemplaire original, signé de façon manuscrite ou au moyen d'un procédé de signature électronique. Le Mandataire conserve l'original et en remet une copie au Mandant et à la Personne de confiance. Le Mandataire peut délivrer aux organismes qui en font la demande une copie ou un extrait du présent mandat limité aux mentions utiles.
 
 [[SIGNATURES]]
 
