@@ -1,6 +1,6 @@
 # Procédures Relais — index
 
-Douze fiches de procédure, une par démarche récurrente listée à la section 7.5 du document projet, rédigées selon le gabarit `00-modele.md`. Chaque fiche est autonome : un opérateur nouvellement recruté doit pouvoir l'exécuter seul.
+Treize fiches de procédure : une par démarche récurrente listée à la section 7.5 du document projet, et la fiche 13 pour l'entrée du client, rédigées selon le gabarit `00-modele.md`. Chaque fiche est autonome : un opérateur nouvellement recruté doit pouvoir l'exécuter seul.
 
 La **durée moyenne** est le temps de travail de l'opérateur Relais (hors délais d'attente des organismes). La **difficulté** va de 1 (démarche en ligne simple, aucun aléa) à 3 (dossier multi-pièces, plusieurs organismes, délais légaux à surveiller). La **fréquence** est estimée par client et par an en régime de croisière, à partir des hypothèses du document projet (≈ 4 h de travail par dossier et par mois).
 
@@ -18,6 +18,7 @@ La **durée moyenne** est le temps de travail de l'opérateur Relais (hors déla
 | 10 | [Banque : consultation, procuration, contestation, clôture](10-banque.md) | Banques, médiateur bancaire | 30 min (contestation) à 1 h (clôture) | 2 | Consultation mensuelle ; contestation 1 à 2 par an |
 | 11 | [Copropriété : convocation à l'AG, pouvoir, charges](11-copropriete.md) | Syndic, conseil syndical | 45 min par AG, 30 min par appel de charges | 2 | AG 1 par an ; appels de charges 4 par an |
 | 12 | [Décès : déclaration, contrats, organismes](12-deces.md) | Mairie, CPAM, caisses, banques, assureurs, notaire | 8 à 12 h sur 3 à 6 mois | 3 | 1 fois par client (forfait Succession) |
+| 13 | [Accueil du parent et signature du mandat](13-accueil-parent-et-mandat.md) | Aucun (Relais, enfant, parent) | 1 h 30 sur 3 à 10 jours | 2 | 1 fois, à l'entrée du client |
 
 ## Rappels transversaux
 
