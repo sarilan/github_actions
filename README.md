@@ -10,6 +10,7 @@ Tout est en français, sans identifiant ni clé dans le dépôt (`.env.example` 
 .
 ├── README.md                      ← ce fichier
 ├── relais-document-projet.md      ← document de cadrage
+├── prestataires.md                ← prestataires à choisir, prix et points à vérifier
 ├── requirements.txt / .env.example / tests.sh
 ├── juridique/
 │   ├── mandat-administratif.docx, cgv.docx, politique-confidentialite.docx
